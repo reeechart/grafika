@@ -1,34 +1,33 @@
 #include "Plane.cpp"
+#include "Canvas.cpp"
 
 class Component {
-	protected:
+	private:
 		Plane plane;
 		Point topLeftPosition;
 		Point bottomRightPosition;
-		short redColor;
-		short greenColor;
-		short blueColor;
+		Color color;
+		short velocityX;
+		short velocityY;
+		short accelerationX;
+		short accelerationY;
 
 	public:
 		// ctor
 		Component(Plane plane, Point topLeftPosition = Point(), Point bottomRightPosition = Point(),
-			short redColor = 0, short greenColor = 0, short blueColor = 0) {
+			Color color = Color()) {
 			this->plane = plane;
 			this->topLeftPosition = topLeftPosition;
 			this->bottomRightPosition = bottomRightPosition;
-			this->redColor = redColor;
-			this->greenColor = greenColor;
-			this->blueColor = blueColor;
+			this->color = color;
 		}
 
 		// cctor
 		Component(const Component& component) {
 			this->plane = component.plane;
-			this->topLeftPosition = topLeftPosition;
-			this->bottomRightPosition = bottomRightPosition;
-			this->redColor = component.redColor;
-			this->greenColor = component.greenColor;
-			this->blueColor = component.blueColor;
+			this->topLeftPosition = component.topLeftPosition;
+			this->bottomRightPosition = component.bottomRightPosition;
+			this->color = component.color;
 		}
 
 		// getter
@@ -44,16 +43,8 @@ class Component {
 			return bottomRightPosition;
 		}
 
-		short getRedColor() {
-			return redColor;
-		}
-
-		short getGreenColor() {
-			return greenColor;
-		}
-
-		short getBlueColor() {
-			return blueColor;
+		Color getColor() {
+			return color;
 		}
 
 		// setter
@@ -69,16 +60,8 @@ class Component {
 			this->bottomRightPosition = position;
 		}
 
-		void setRedColor(short redColor) {
-			this->redColor = redColor;
-		}
-
-		void setGreenColor(short greenColor) {
-			this->greenColor = greenColor;
-		}
-
-		void setBlueColor(short blueColor) {
-			this->blueColor = blueColor;
+		void setColor(Color color) {
+			this->color = color;
 		}
 
 		void scale(Point point, float scaleX, float scaleY) {

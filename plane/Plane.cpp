@@ -4,7 +4,7 @@
 using namespace std;
 
 class Plane {
-	protected:
+	private:
 		vector<Line> lines;
 
 	public:
