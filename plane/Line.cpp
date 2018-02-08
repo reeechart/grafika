@@ -5,10 +5,15 @@ class Line {
 	private:
 		Point p1;
 		Point p2;
-	
+
 	public:
 		// ctor
 		Line(Point p1, Point p2) {
+			this->p1 = p1;
+			this->p2 = p2;
+		}
+
+		Line(const Point &p) {
 			this->p1 = p1;
 			this->p2 = p2;
 		}
