@@ -6,6 +6,11 @@
 #include <vector>
 #include "Point.cpp"
 
+#define NOT_EXIST -1
+#define EXIST_NORMAL 0
+#define EXIST_ABOVE 1
+#define EXIST_BELOW 2
+
 using namespace std;
 
 class Line {
@@ -81,6 +86,32 @@ class Line {
 		void rotate(Point point, float angle) {
 			this->p1.rotate(point, angle);
 			this->p2.rotate(point, angle);
+		}
+
+		bool isHorizontal() {
+			return p1.getY() == p2.getY();
+		}
+
+		pair<short, short> getIntersectionPoint(short y) {
+			if (isHorizontal())
+				return make_pair(NOT_EXIST, NOT_EXIST);
+			else {
+				if ((this->p1.getY() - y) * (this->p2.getY() - y) > 0)
+					return make_pair(NOT_EXIST, NOT_EXIST);
+				else {
+					float intersectionX;
+					short statusCode = EXIST_NORMAL;
+					intersectionX = ((p2.getX() - p1.getX()) * (y - p1.getY())) / (p2.getY() - p1.getY()) + p1.getX();
+					if ((short) round(intersectionX) == p1.getX()) {
+						if (y < p2.getY()) statusCode = EXIST_ABOVE;
+						else statusCode = EXIST_BELOW;
+					} else if ((short) round(intersectionX) == p2.getX()) {
+						if (y < p1.getY()) statusCode = EXIST_ABOVE;
+						else statusCode = EXIST_BELOW;
+					}
+					return make_pair((short) round(intersectionX), (short)statusCode);
+				}
+			}
 		}
 };
 
