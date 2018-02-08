@@ -1,3 +1,6 @@
+#ifndef POINT_CPP
+#define POINT_CPP
+
 #include <math.h>
 
 class Point {
@@ -57,3 +60,5 @@ class Point {
 			this->y = (short)round(newY);
 		}
 };
+
+#endif

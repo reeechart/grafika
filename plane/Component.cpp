@@ -1,3 +1,6 @@
+#ifndef COMPONENT_CPP
+#define COMPONENT_CPP
+
 #include "Plane.cpp"
 #include "Canvas.cpp"
 
@@ -77,3 +80,5 @@ class Component {
 			plane.rotate(point, angle);
 		}
 };
+
+#endif

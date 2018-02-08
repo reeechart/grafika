@@ -1,3 +1,6 @@
+#ifndef CANVAS_CPP
+#define CANVAS_CPP
+
 #include "Color.cpp"
 
 #define V_SIZE 760
@@ -36,3 +39,5 @@ class Canvas {
 			colorMap[posI][posJ] = color;
 		}
 };
+
+#endif

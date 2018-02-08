@@ -1,3 +1,6 @@
+#ifndef LINE_CPP
+#define LINE_CPP
+
 #include <math.h>
 #include <stdlib.h>
 #include <vector>
@@ -80,3 +83,5 @@ class Line {
 			this->p2.rotate(point, angle);
 		}
 };
+
+#endif

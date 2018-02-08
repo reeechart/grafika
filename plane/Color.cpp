@@ -1,3 +1,6 @@
+#ifndef COLOR_CPP
+#define COLOR_CPP
+
 class Color {
 	private:
 		short red;
@@ -45,3 +48,5 @@ class Color {
 			this->blue = blue;
 		}
 };
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef PLANE_CPP
+#define PLANE_CPP
+
 #include <vector>
 #include "Line.cpp"
 
@@ -47,3 +50,5 @@ class Plane {
 			}
 		}
 };
+
+#endif
