@@ -12,6 +12,12 @@ class Point {
 			this->y = y;
 		}
 
+		// cctor
+		Point(const Point& point) {
+			this->x = point.x;
+			this->y = point.y;
+		}
+
 		// getter
 		short getX() {
 			return x;
