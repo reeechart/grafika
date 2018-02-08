@@ -13,30 +13,31 @@ class Canvas {
 	public:
 		// ctor
 		Canvas() {
-			for (int i = 0; i < V_SIZE; i++) {
-				for (int j = 0; j < H_SIZE; j++) {
-					colorMap[i][j] = Color();
+			for (int y = 0; y < V_SIZE; y++) {
+				for (int x = 0; x < H_SIZE; x++) {
+					colorMap[y][x] = Color();
 				}
 			}
 		}
 
 		// cctor
 		Canvas(const Canvas& canvas) {
-			for (int i = 0; i < V_SIZE; i++) {
-				for (int j = 0; j < H_SIZE; j++) {
-					this->colorMap[i][j] = canvas.colorMap[i][j];
+			for (int y = 0; y < V_SIZE; y++) {
+				for (int x = 0; x < H_SIZE; x++) {
+					this->colorMap[y][x] = canvas.colorMap[y][x];
 				}
 			}
 		}
 
 		// getter
-		Color getColor(int posI, int posJ) {
-			return colorMap[posI][posJ];
+		Color getColor(int posY, int posX) {
+			return colorMap[posY][posX];
 		}
 
 		// setter
-		void setColor(int posI, int posJ, Color color) {
-			colorMap[posI][posJ] = color;
+		void setColor(int posY, int posX, Color color) {
+			if (!(posY >= V_SIZE || posY < 0 || posX >= H_SIZE || posX < 0))
+				colorMap[posY][posX] = color;
 		}
 };
 

@@ -14,6 +14,21 @@ class Component {
 		short velocityY;
 		short accelerationX;
 		short accelerationY;
+		void updateEnvelope() {
+			short minX = H_SIZE, maxX = 0, minY = V_SIZE, maxY = 0;
+			for (auto& line : plane.getLines()) {
+				if (line.getP1().getX() < minX) minX =line.getP1().getX();
+				if (line.getP2().getX() < minX) minX =line.getP2().getX();
+				if (line.getP1().getX() > maxX) maxX =line.getP1().getX();
+				if (line.getP2().getX() > maxX) maxX =line.getP2().getX();
+				if (line.getP1().getY() < minY) minY =line.getP1().getY();
+				if (line.getP2().getY() < minY) minY =line.getP2().getY();
+				if (line.getP1().getY() > maxY) maxY =line.getP1().getY();
+				if (line.getP2().getY() > maxY) maxY =line.getP2().getY();
+			}
+			bottomRightPosition = Point(maxX, maxY);
+			topLeftPosition = Point(minX, minY);
+		}
 
 	public:
 		// ctor
@@ -73,15 +88,18 @@ class Component {
 
 		void scale(Point point, float scaleX, float scaleY) {
 			plane.scale(point, scaleX, scaleY);
+			updateEnvelope();
 		}
 
 		void translate(short deltaX, short deltaY) {
 			plane.translate(deltaX, deltaY);
+			updateEnvelope();
 		}
 
 		// angle in degrees
 		void rotate(Point point, float angle) {
 			plane.rotate(point, angle);
+			updateEnvelope();
 		}
 };
 
