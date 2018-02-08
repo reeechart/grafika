@@ -17,6 +17,10 @@ class Component {
 
 	public:
 		// ctor
+		Component() {
+			
+		}
+
 		Component(Plane plane, Point topLeftPosition = Point(), Point bottomRightPosition = Point(),
 			Color color = Color()) {
 			this->plane = plane;
