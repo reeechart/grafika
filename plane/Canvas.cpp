@@ -5,19 +5,30 @@
 
 #include <iostream>
 
-#define V_SIZE 760
+#define V_SIZE 700
 #define H_SIZE 1366
+#define GROUND_HEIGHT 10
 
 class Canvas {
 	private:
 		Color colorMap[V_SIZE][H_SIZE];
+		const Color grassColor = Color(100, 255, 0);
+		const short cliffLength = 500;
 
 	public:
 		// ctor
 		Canvas() {
-			for (int y = 0; y < V_SIZE; y++) {
+			for (int y = 0; y < V_SIZE - GROUND_HEIGHT; y++) {
 				for (int x = 0; x < H_SIZE; x++) {
 					colorMap[y][x] = Color();
+				}
+			}
+			for (int y = V_SIZE - GROUND_HEIGHT; y < V_SIZE; y++) {
+				for (int x = 0; x < H_SIZE; x++) {
+					if (x < cliffLength)
+						colorMap[y][x] = Color();
+					else
+						colorMap[y][x] = grassColor;
 				}
 			}
 		}
@@ -32,9 +43,17 @@ class Canvas {
 		}
 
 		void clear() {
-			for (int y = 0; y < V_SIZE; y++) {
+			for (int y = 0; y < V_SIZE - GROUND_HEIGHT; y++) {
 				for (int x = 0; x < H_SIZE; x++) {
 					colorMap[y][x] = Color();
+				}
+			}
+			for (int y = V_SIZE - GROUND_HEIGHT; y < V_SIZE; y++) {
+				for (int x = 0; x < H_SIZE; x++) {
+					if (x < cliffLength)
+						colorMap[y][x] = Color();
+					else
+						colorMap[y][x] = grassColor;
 				}
 			}
 		}

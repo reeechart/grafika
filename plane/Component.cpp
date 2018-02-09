@@ -10,10 +10,10 @@ class Component {
 		Point topLeftPosition;
 		Point bottomRightPosition;
 		Color color;
-		short velocityX;
-		short velocityY;
-		short accelerationX;
-		short accelerationY;
+		float velocityX;
+		float velocityY;
+		float accelerationX;
+		float accelerationY;
 		void updateEnvelope() {
 			short minX = H_SIZE, maxX = 0, minY = V_SIZE, maxY = 0;
 			for (auto& line : plane.getLines()) {
@@ -29,6 +29,7 @@ class Component {
 			bottomRightPosition = Point(maxX, maxY);
 			topLeftPosition = Point(minX, minY);
 		}
+		float springConstant;
 
 	public:
 		// ctor
@@ -42,6 +43,11 @@ class Component {
 			this->topLeftPosition = topLeftPosition;
 			this->bottomRightPosition = bottomRightPosition;
 			this->color = color;
+			this->velocityX = 0;
+			this->velocityY = 0;
+			this->accelerationX = 0;
+			this->accelerationY = 0;
+			this->springConstant = 0;
 		}
 
 		// cctor
@@ -50,6 +56,11 @@ class Component {
 			this->topLeftPosition = component.topLeftPosition;
 			this->bottomRightPosition = component.bottomRightPosition;
 			this->color = component.color;
+			this->velocityX = component.velocityX;
+			this->velocityY = component.velocityY;
+			this->accelerationX = component.accelerationX;
+			this->accelerationY = component.accelerationY;
+			this->springConstant = component.springConstant;
 		}
 
 		// getter
@@ -87,6 +98,20 @@ class Component {
 			this->color = color;
 		}
 
+		void setVelocity(float velocityX, float velocityY) {
+			this->velocityX = velocityX;
+			this->velocityY = velocityY;
+		}
+
+		void setAcceleration(float accelerationX, float accelerationY) {
+			this->accelerationX = accelerationX;
+			this->accelerationY = accelerationY;
+		}
+
+		void setSpringConstant(float springConstant) {
+			this->springConstant = springConstant;
+		}
+
 		void scale(Point point, float scaleX, float scaleY) {
 			plane.scale(point, scaleX, scaleY);
 			updateEnvelope();
@@ -109,6 +134,17 @@ class Component {
 			middleY = (bottomRightPosition.getY() + topLeftPosition.getY()) / 2;
 			Point middlePoint = Point(middleX, middleY);
 			rotate(middlePoint, angle);
+		}
+
+		void update() {
+			plane.translate(velocityX, velocityY);
+			velocityY += accelerationY;
+			velocityX += accelerationX;
+			updateEnvelope();
+		}
+
+		void bounce() {
+			velocityY *= -springConstant;
 		}
 };
 
