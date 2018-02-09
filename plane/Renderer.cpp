@@ -1,3 +1,6 @@
+#ifndef RENDERER_CPP
+#define RENDERER_CPP
+
 #include "Component.cpp"
 #include "Canvas.cpp"
 #include <stdlib.h>
@@ -13,10 +16,11 @@
 #include <iostream>
 using namespace std;
 
-struct fb_var_screeninfo vinfo;
-struct fb_fix_screeninfo finfo;
+
 
 class Renderer {
+    struct fb_var_screeninfo vinfo;
+    struct fb_fix_screeninfo finfo;
     private:
         char *fbp = 0;
         long int screensize = 0;
@@ -71,7 +75,6 @@ class Renderer {
         }
 
         void scanLineComponent(Component component, Canvas *canvas) {
-            // TODO: finish this
             for (int y = component.getTopLeftPosition().getY(); y <= component.getBottomRightPosition().getY(); y++) {
                 vector<pair<short, short>> intersections;
                 for (auto& line : component.getPlane().getLines()) {
@@ -104,7 +107,6 @@ class Renderer {
                         }
                     }
                 }
-                intersections.push_back(make_pair(component.getBottomRightPosition().getX(), 0));
                 sort(intersections.begin(), intersections.end());
                 for (int i = 0; i < intersections.size() - 1; i += 2) {
                     for (int x = intersections[i].first; x < intersections[i + 1].first; x++) {
@@ -129,29 +131,4 @@ class Renderer {
         }
 };
 
-int main() {
-    Plane plane;
-    Component component;
-    Canvas canvas;
-    Renderer renderer;
-
-    plane.addLine(Line(Point(400,400), Point(400,600)));
-    plane.addLine(Line(Point(400,600), Point(600,600)));
-    plane.addLine(Line(Point(600,600), Point(600,400)));
-    plane.addLine(Line(Point(600,400), Point(400,400)));
-    component.setPlane(plane);
-    component.setColor(Color(255,255,255));
-    component.setTopLeftPosition(Point(0,0));
-    component.setBottomRightPosition(Point(600,600));
-
-    // renderer.renderToCanvas(component,&canvas);
-    // renderer.copyToFrameBuffer(canvas);
-    // sleep(5);
-
-    component.rotate(Point(500,500), 20);
-    renderer.renderToCanvas(component,&canvas);
-    renderer.scanLineComponent(component,&canvas);
-    renderer.copyToFrameBuffer(canvas);
-    while (1);
-    return 0;
-}
+#endif

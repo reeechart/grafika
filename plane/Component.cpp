@@ -33,7 +33,7 @@ class Component {
 	public:
 		// ctor
 		Component() {
-			
+
 		}
 
 		Component(Plane plane, Point topLeftPosition = Point(), Point bottomRightPosition = Point(),
@@ -72,6 +72,7 @@ class Component {
 		// setter
 		void setPlane(Plane plane) {
 			this->plane = plane;
+			updateEnvelope();
 		}
 
 		void setTopLeftPosition(Point position) {

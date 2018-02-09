@@ -20,14 +20,14 @@ class Line {
 
 	public:
 		// ctor
-		Line(Point p1, Point p2) {
+		Line(Point p1 = Point(), Point p2 = Point()) {
 			this->p1 = p1;
 			this->p2 = p2;
 		}
 
-		Line(const Point &p) {
-			this->p1 = p1;
-			this->p2 = p2;
+		Line(const Line& line) {
+			this->p1 = line.p1;
+			this->p2 = line.p2;
 		}
 
 		// getter
@@ -103,10 +103,10 @@ class Line {
 					short statusCode = EXIST_NORMAL;
 					intersectionX = ((p2.getX() - p1.getX()) * (y - p1.getY())) / (p2.getY() - p1.getY()) + p1.getX();
 					if ((short) round(intersectionX) == p1.getX()) {
-						if (y < p2.getY()) statusCode = EXIST_ABOVE;
+						if (y > p2.getY()) statusCode = EXIST_ABOVE;
 						else statusCode = EXIST_BELOW;
 					} else if ((short) round(intersectionX) == p2.getX()) {
-						if (y < p1.getY()) statusCode = EXIST_ABOVE;
+						if (y > p1.getY()) statusCode = EXIST_ABOVE;
 						else statusCode = EXIST_BELOW;
 					}
 					return make_pair((short) round(intersectionX), (short)statusCode);
