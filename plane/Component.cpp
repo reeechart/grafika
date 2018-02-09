@@ -102,6 +102,14 @@ class Component {
 			plane.rotate(point, angle);
 			updateEnvelope();
 		}
+
+		void rotateAgainstCenter(float angle) {
+			short middleX, middleY;
+			middleX = (bottomRightPosition.getX() + topLeftPosition.getX()) / 2;
+			middleY = (bottomRightPosition.getY() + topLeftPosition.getY()) / 2;
+			Point middlePoint = Point(middleX, middleY);
+			rotate(middlePoint, angle);
+		}
 };
 
 #endif

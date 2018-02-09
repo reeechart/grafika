@@ -25,6 +25,51 @@ class Renderer {
         char *fbp = 0;
         long int screensize = 0;
         int fbfd = 0;
+
+        void scanLineComponent(Component component, Canvas *canvas) {
+            for (int y = component.getTopLeftPosition().getY(); y <= component.getBottomRightPosition().getY(); y++) {
+                vector<pair<short, short>> intersections;
+                for (auto& line : component.getPlane().getLines()) {
+                    pair<short, short> intersection = line.getIntersectionPoint(y);
+                    if (intersection.second == EXIST_NORMAL) {
+                        intersections.push_back(intersection);
+                    } else if (intersection.second == EXIST_ABOVE) {
+                        bool oppositeFound = find(intersections.begin(), intersections.end(),
+                            make_pair(intersection.first, (short)EXIST_BELOW)) != intersections.end();
+                        bool unilateralFound = find(intersections.begin(), intersections.end(),
+                            intersection) != intersections.end();
+                        if (unilateralFound) {
+                            intersections.push_back(intersection);
+                        } else {
+                            if (!oppositeFound) {
+                                intersections.push_back(intersection);
+                            }
+                        }
+                    } else if (intersection.second == EXIST_BELOW) {
+                        bool oppositeFound = find(intersections.begin(), intersections.end(),
+                            make_pair(intersection.first, (short)EXIST_ABOVE)) != intersections.end();
+                        bool unilateralFound = find(intersections.begin(), intersections.end(),
+                            intersection) != intersections.end();
+                        if (unilateralFound) {
+                            intersections.push_back(intersection);
+                        } else {
+                            if (!oppositeFound) {
+                                intersections.push_back(intersection);
+                            }
+                        }
+                    }
+                }
+                sort(intersections.begin(), intersections.end());
+                if (intersections.size() >= 2) {
+                    for (int i = 0; i < intersections.size() - 1; i += 2) {
+                        for (int x = intersections[i].first; x < intersections[i + 1].first; x++) {
+                            canvas->setColor(y, x, component.getColor());
+                        }
+                    }
+                }
+            }
+        }
+
     public:
         Renderer() {
             int x = 0, y = 0;
@@ -72,48 +117,7 @@ class Renderer {
                     canvas->setColor(point.getY(), point.getX(), component.getColor());
                 }
             }
-        }
-
-        void scanLineComponent(Component component, Canvas *canvas) {
-            for (int y = component.getTopLeftPosition().getY(); y <= component.getBottomRightPosition().getY(); y++) {
-                vector<pair<short, short>> intersections;
-                for (auto& line : component.getPlane().getLines()) {
-                    pair<short, short> intersection = line.getIntersectionPoint(y);
-                    if (intersection.second == EXIST_NORMAL) {
-                        intersections.push_back(intersection);
-                    } else if (intersection.second == EXIST_ABOVE) {
-                        bool oppositeFound = find(intersections.begin(), intersections.end(),
-                            make_pair(intersection.first, (short)EXIST_BELOW)) != intersections.end();
-                        bool unilateralFound = find(intersections.begin(), intersections.end(),
-                            intersection) != intersections.end();
-                        if (unilateralFound) {
-                            intersections.push_back(intersection);
-                        } else {
-                            if (!oppositeFound) {
-                                intersections.push_back(intersection);
-                            }
-                        }
-                    } else if (intersection.second == EXIST_BELOW) {
-                        bool oppositeFound = find(intersections.begin(), intersections.end(),
-                            make_pair(intersection.first, (short)EXIST_ABOVE)) != intersections.end();
-                        bool unilateralFound = find(intersections.begin(), intersections.end(),
-                            intersection) != intersections.end();
-                        if (unilateralFound) {
-                            intersections.push_back(intersection);
-                        } else {
-                            if (!oppositeFound) {
-                                intersections.push_back(intersection);
-                            }
-                        }
-                    }
-                }
-                sort(intersections.begin(), intersections.end());
-                for (int i = 0; i < intersections.size() - 1; i += 2) {
-                    for (int x = intersections[i].first; x < intersections[i + 1].first; x++) {
-                        canvas->setColor(y, x, component.getColor());
-                    }
-                }
-            }
+            scanLineComponent(component, canvas);
         }
 
         void copyToFrameBuffer(Canvas& canvas) {

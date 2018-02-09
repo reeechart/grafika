@@ -3,6 +3,8 @@
 
 #include "Color.cpp"
 
+#include <iostream>
+
 #define V_SIZE 760
 #define H_SIZE 1366
 
@@ -29,6 +31,14 @@ class Canvas {
 			}
 		}
 
+		void clear() {
+			for (int y = 0; y < V_SIZE; y++) {
+				for (int x = 0; x < H_SIZE; x++) {
+					colorMap[y][x] = Color();
+				}
+			}
+		}
+
 		// getter
 		Color getColor(int posY, int posX) {
 			return colorMap[posY][posX];
@@ -36,8 +46,9 @@ class Canvas {
 
 		// setter
 		void setColor(int posY, int posX, Color color) {
-			if (!(posY >= V_SIZE || posY < 0 || posX >= H_SIZE || posX < 0))
+			if (!(posY >= V_SIZE || posY < 0 || posX >= H_SIZE || posX < 0)) {
 				colorMap[posY][posX] = color;
+			}
 		}
 };
 

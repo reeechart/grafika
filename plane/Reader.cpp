@@ -11,32 +11,24 @@
 using namespace std;
 
 class Reader {
-    private:
-        ifstream fileOpen;
-        string filename;
     public:
         //ctor
-        Reader(string filename) {
-            this->filename = filename;
-            fileOpen.open(filename);
-        }
-        //cctor
-        Reader(const Reader& reader) {
-            this->filename = reader.filename;
-            this->fileOpen.open(this->filename);
+        Reader() {
+
         }
 
         //dtor
         ~Reader() {
-            fileOpen.close();
-            filename = "";
         }
 
-        void readComponent(Component *component) {
+        void readComponent(Component *component, string fileName) {
             Line planeLine;
             Point linePoint;
             short readData;
             Plane plane = component->getPlane();
+
+            ifstream fileOpen;
+            fileOpen.open(fileName);
 
             int dataCounter = 0;
             if(fileOpen.is_open()) {
@@ -66,6 +58,8 @@ class Reader {
             } else {
                 cout << "404 File Not Found" << endl;
             }
+
+            fileOpen.close();
         }
 };
 
