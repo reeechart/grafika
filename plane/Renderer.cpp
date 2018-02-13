@@ -30,7 +30,7 @@ class Renderer {
             for (int y = component.getTopLeftPosition().getY(); y <= component.getBottomRightPosition().getY(); y++) {
                 vector<pair<short, short>> intersections;
                 for (auto& line : component.getPlane().getLines()) {
-                    pair<short, short> intersection = line.getIntersectionPoint(y);
+                    pair<short, short> intersection = line.getIntersectionStatusY(y);
                     if (intersection.second == EXIST_NORMAL) {
                         intersections.push_back(intersection);
                     } else if (intersection.second == EXIST_ABOVE) {

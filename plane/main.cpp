@@ -15,6 +15,7 @@ int main() {
     Reader reader;
     Renderer renderer;
     Canvas canvas;
+    ClippingPlane clippingPlane(200, 500, 200, 1100);
 
     // Read components from txt
     reader.readComponent(&airplane, "assets/airplane.txt");
@@ -103,20 +104,44 @@ int main() {
         }
 
         canvas.clear();
-        renderer.renderToCanvas(scaledAirplane, &canvas);
-        renderer.renderToCanvas(scaledPropellerLeft, &canvas);
-        renderer.renderToCanvas(scaledPropellerRight, &canvas);
-        renderer.renderToCanvas(scaledWheelLeft, &canvas);
+        renderer.renderToCanvas(scaledAirplane.clip(clippingPlane), &canvas);
+        renderer.renderToCanvas(scaledPropellerLeft.clip(clippingPlane), &canvas);
+        renderer.renderToCanvas(scaledPropellerRight.clip(clippingPlane), &canvas);
+        renderer.renderToCanvas(scaledWheelLeft.clip(clippingPlane), &canvas);
         if (scale < SCALE_TIME_HIT) {
-            renderer.renderToCanvas(scaledCannonBall, &canvas);
-            renderer.renderToCanvas(scaledWheelRight, &canvas);
+            renderer.renderToCanvas(scaledCannonBall.clip(clippingPlane), &canvas);
+            renderer.renderToCanvas(scaledWheelRight.clip(clippingPlane), &canvas);
         } else {
-            renderer.renderToCanvas(wheelRight, &canvas);
+            renderer.renderToCanvas(wheelRight.clip(clippingPlane), &canvas);
         }
-        renderer.renderToCanvas(parachute, &canvas);
+        renderer.renderToCanvas(parachute.clip(clippingPlane), &canvas);
 
         renderer.copyToFrameBuffer(canvas);
     }
+
+    // ClippingPlane clippingPlane(20, 600, 20, 1200);
+    
+    // Component test;
+    // Reader reader;
+
+    // reader.readComponent(&test, "assets/wheel.txt");
+    // test.setColor(Color(255, 255, 255));
+    // test.scale(Point(0, 0), 10, 10);
+
+
+
+    // Renderer renderer;
+    // Canvas canvas; 
+    // test = test.clip(clippingPlane);
+
+    // cout << endl;
+    // for (auto& line : test.getPlane().getLines()) {
+    //     cout << line.getP1().getX() << "," << line.getP1().getY() << " " << line.getP2().getX() << "," << line.getP2().getY() << endl;
+    // }
+
+    // renderer.renderToCanvas(test.clip(clippingPlane), &canvas);
+
+    // renderer.copyToFrameBuffer(canvas);
 
     while(1);
     return 0;

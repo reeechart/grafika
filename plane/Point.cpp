@@ -59,6 +59,11 @@ class Point {
 			this->x = (short)round(newX);
 			this->y = (short)round(newY);
 		}
+
+		bool isEqual(Point point) {
+			return x == point.x && y == point.y;
+		}
+
 };
 
 #endif

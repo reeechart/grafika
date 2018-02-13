@@ -10,6 +10,8 @@
 #define EXIST_NORMAL 0
 #define EXIST_ABOVE 1
 #define EXIST_BELOW 2
+#define EXIST_LEFT 1
+#define EXIST_RIGHT 2
 
 using namespace std;
 
@@ -92,7 +94,33 @@ class Line {
 			return p1.getY() == p2.getY();
 		}
 
-		pair<short, short> getIntersectionPoint(short y) {
+		bool isVertical() {
+			return p1.getX() == p2.getX();
+		}
+
+		// pair<short, short> getIntersectionStatusX(short x) {
+		// 	if (isVertical())
+		// 		return make_pair(NOT_EXIST, NOT_EXIST);
+		// 	else {
+		// 		if ((this->p1.getX() - x) * (this->p2.getX() - x) > 0)
+		// 			return make_pair(NOT_EXIST, NOT_EXIST);
+		// 		else {
+		// 			float intersectionY;
+		// 			short statusCode = EXIST_NORMAL;
+		// 			intersectionY = ((p2.getY() - p1.getY()) * (x - p1.getX())) / (p2.getX() - p1.getX()) + p1.getY();
+		// 			if ((short) round(intersectionY) == p1.getY()) {
+		// 				if (x > p2.getX()) statusCode = EXIST_LEFT;
+		// 				else statusCode = EXIST_RIGHT;
+		// 			} else if ((short) round(intersectionY) == p2.getY()) {
+		// 				if (x > p1.getX()) statusCode = EXIST_LEFT;
+		// 				else statusCode = EXIST_RIGHT;
+		// 			}
+		// 			return make_pair((short) round(intersectionY), (short)statusCode);
+		// 		}
+		// 	}
+		// }
+
+		pair<short, short> getIntersectionStatusY(short y) {
 			if (isHorizontal())
 				return make_pair(NOT_EXIST, NOT_EXIST);
 			else {
@@ -113,6 +141,23 @@ class Line {
 				}
 			}
 		}
+
+		short getIntersectionPointX(short y) {
+			if ((p1.getY() - y) * (p2.getY() - y) > 0) {
+				return -1;
+			} else {
+				return ((p2.getX() - p1.getX()) * (y - p1.getY())) / (p2.getY() - p1.getY()) + p1.getX();
+			}
+		}
+
+		short getIntersectionPointY(short x) {
+			if ((p2.getX() - x) * (p2.getX() - x) > 0) {
+				return -1;
+			} else {
+				return ((p2.getY() - p1.getY()) * (x - p1.getX())) / (p2.getX() - p1.getX()) + p1.getY();
+			}
+ 		}
+
 };
 
 #endif
