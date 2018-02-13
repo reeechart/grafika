@@ -146,15 +146,17 @@ class Line {
 			if ((p1.getY() - y) * (p2.getY() - y) > 0) {
 				return -1;
 			} else {
-				return ((p2.getX() - p1.getX()) * (y - p1.getY())) / (p2.getY() - p1.getY()) + p1.getX();
+				float intersectionX = ((p2.getX() - p1.getX()) * (y - p1.getY())) / (p2.getY() - p1.getY()) + p1.getX();
+				return (short) round(intersectionX);
 			}
 		}
 
 		short getIntersectionPointY(short x) {
-			if ((p2.getX() - x) * (p2.getX() - x) > 0) {
+			if ((p1.getX() - x) * (p2.getX() - x) > 0) {
 				return -1;
 			} else {
-				return ((p2.getY() - p1.getY()) * (x - p1.getX())) / (p2.getX() - p1.getX()) + p1.getY();
+				float intersectionY = ((p2.getY() - p1.getY()) * (x - p1.getX())) / (p2.getX() - p1.getX()) + p1.getY();
+				return (short) round(intersectionY);
 			}
  		}
 

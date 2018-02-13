@@ -108,6 +108,18 @@ class Component {
 			this->springConstant = component.springConstant;
 		}
 
+		Component& operator=(const Component& component) {
+			this->plane = component.plane;
+			this->topLeftPosition = component.topLeftPosition;
+			this->bottomRightPosition = component.bottomRightPosition;
+			this->color = component.color;
+			this->velocityX = component.velocityX;
+			this->velocityY = component.velocityY;
+			this->accelerationX = component.accelerationX;
+			this->accelerationY = component.accelerationY;
+			this->springConstant = component.springConstant;
+		}
+
 		// getter
 		Plane getPlane() {
 			return plane;
@@ -194,6 +206,9 @@ class Component {
 
 		Component& clip(ClippingPlane& clippingPlane) {
 			static Component newComponent = *this;
+			newComponent.color.setRedValue(color.getRedValue());
+			newComponent.color.setGreenValue(color.getGreenValue());
+			newComponent.color.setBlueValue(color.getBlueValue());
 			Plane newPlane;
 			vector<short> topX, bottomX, leftY, rightY;
 
@@ -203,6 +218,8 @@ class Component {
 				short p2Code = clippingPlane.getCode(line.getP2());
 				Point newP1(-1, -1), newP2(-1, -1);
 				short xorResult = p1Code ^ p2Code;
+
+				// cout << p1Code << "--" << p2Code << endl;
 				
 				if (p1Code == 0) {
 					newP1 = line.getP1();
@@ -216,10 +233,10 @@ class Component {
 				}
 
 				short intersection;
-					
+				
 				if (xorResult % 16 >= 8) {
 					intersection = line.getIntersectionPointX(clippingPlane.getTopLine());
-					if (intersection != -1) {
+					if (intersection != -1 && intersection >= clippingPlane.getLeftLine() && intersection <= clippingPlane.getRightLine()) {
 						if (newP1.isEqual(Point(-1, -1))) {
 							newP1 = Point(intersection, clippingPlane.getTopLine());
 						} else {
@@ -229,7 +246,7 @@ class Component {
 				}
 				if (xorResult % 8 >= 4) {
 					intersection = line.getIntersectionPointX(clippingPlane.getBottomLine());
-					if (intersection != -1) {
+					if (intersection != -1 && intersection >= clippingPlane.getLeftLine() && intersection <= clippingPlane.getRightLine()) {
 						if (newP1.isEqual(Point(-1, -1))) {
 							newP1 = Point(intersection, clippingPlane.getBottomLine());
 						} else {
@@ -239,7 +256,7 @@ class Component {
 				}
 				if (xorResult % 4 >= 2) {
 					intersection = line.getIntersectionPointY(clippingPlane.getLeftLine());
-					if (intersection != -1) {
+					if (intersection != -1 && intersection >= clippingPlane.getTopLine() && intersection <= clippingPlane.getBottomLine()) {
 						if (newP1.isEqual(Point(-1, -1))) {
 							newP1 = Point(clippingPlane.getLeftLine(), intersection);
 						} else {
@@ -249,7 +266,7 @@ class Component {
 				}
 				if (xorResult % 2 >= 1) {
 					intersection = line.getIntersectionPointY(clippingPlane.getRightLine());
-					if (intersection != -1) {
+					if (intersection != -1 && intersection >= clippingPlane.getTopLine() && intersection <= clippingPlane.getBottomLine()) {
 						if (newP1.isEqual(Point(-1, -1))) {
 							newP1 = Point(clippingPlane.getRightLine(), intersection);
 						} else {
@@ -309,6 +326,7 @@ class Component {
 			sort(leftY.begin(), leftY.end());
 			sort(rightY.begin(), rightY.end());
 
+
 			if (topX.size() >= 2) {
             	for (int i = 0; i < topX.size() - 1; i += 2) {
             		newPlane.addLine(Line(Point(topX[i], clippingPlane.getTopLine()), Point(topX[i + 1], clippingPlane.getTopLine())));
@@ -331,6 +349,11 @@ class Component {
             }
 
 			newComponent.setPlane(newPlane);
+
+			for (auto& line : newComponent.getPlane().getLines()) {
+		        cout << line.getP1().getX() << "," << line.getP1().getY() << " " << line.getP2().getX() << "," << line.getP2().getY() << endl;
+		    }
+
 			return newComponent;
 
 		}

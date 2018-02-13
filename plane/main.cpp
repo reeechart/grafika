@@ -15,7 +15,7 @@ int main() {
     Reader reader;
     Renderer renderer;
     Canvas canvas;
-    ClippingPlane clippingPlane(200, 500, 200, 1100);
+    ClippingPlane clippingPlane(200, 500, 180, 1100);
 
     // Read components from txt
     reader.readComponent(&airplane, "assets/airplane.txt");
@@ -118,30 +118,6 @@ int main() {
 
         renderer.copyToFrameBuffer(canvas);
     }
-
-    // ClippingPlane clippingPlane(20, 600, 20, 1200);
-    
-    // Component test;
-    // Reader reader;
-
-    // reader.readComponent(&test, "assets/wheel.txt");
-    // test.setColor(Color(255, 255, 255));
-    // test.scale(Point(0, 0), 10, 10);
-
-
-
-    // Renderer renderer;
-    // Canvas canvas; 
-    // test = test.clip(clippingPlane);
-
-    // cout << endl;
-    // for (auto& line : test.getPlane().getLines()) {
-    //     cout << line.getP1().getX() << "," << line.getP1().getY() << " " << line.getP2().getX() << "," << line.getP2().getY() << endl;
-    // }
-
-    // renderer.renderToCanvas(test.clip(clippingPlane), &canvas);
-
-    // renderer.copyToFrameBuffer(canvas);
 
     while(1);
     return 0;
