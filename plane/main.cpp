@@ -83,7 +83,7 @@ int main() {
     Point ballOrigin(653, 0);
     float scale = 1;
     float rotation = 0;
-    float zoom = 1.1;
+    float zoom = 1.5;
     while (1) {
         scale += 0.1;
         rotation += 10;
@@ -137,6 +137,8 @@ int main() {
 
         if (isZoomed) {
         	scaledAirplane.scale(origin, zoom, zoom);
+        	scaledWindows.scale(origin, zoom, zoom);
+        	scaledPilot.scale(origin, zoom, zoom);
         	scaledPropellerLeft.scale(origin, zoom, zoom);
 	        scaledPropellerRight.scale(origin, zoom, zoom);
 	        scaledWheelLeft.scale(origin, zoom, zoom);
@@ -162,7 +164,7 @@ int main() {
 
         renderer.copyToFrameBuffer(canvas);
 
-        usleep(100000);
+        usleep(10000);
     }
 
     while(1) {
