@@ -26,6 +26,8 @@ int main() {
     Component wheelLeft, wheelRight;
     Component parachute;
     Component cannonBall;
+    Component windows;
+    Component pilot;
     Reader reader;
     Renderer renderer;
     Canvas canvas;
@@ -37,6 +39,8 @@ int main() {
     reader.readComponent(&wheelLeft, "assets/wheel.txt");
     reader.readComponent(&parachute, "assets/parachute.txt");
     reader.readComponent(&cannonBall, "assets/wheel.txt");
+    reader.readComponent(&windows, "assets/windows.txt");
+    reader.readComponent(&pilot, "assets/wheel.txt");
 
     // Set color for each components
     airplane.setColor(Color(255, 255, 255));
@@ -44,6 +48,8 @@ int main() {
     wheelLeft.setColor(Color(120, 120, 120));
     parachute.setColor(Color(255, 255, 0));
     cannonBall.setColor(Color(240, 120, 60));
+    windows.setColor(Color(201,214,255));
+    pilot.setColor(Color(0,0,0));
 
     // Copy propeller and wheel
     propellerRight = propellerLeft;
@@ -60,6 +66,8 @@ int main() {
 
     // Set initial position for each component
     airplane.translate(500, 400);
+    windows.translate(500,400);
+    pilot.translate(572,412);
     propellerLeft.translate(518, 405);
     propellerRight.translate(618, 405);
     wheelLeft.translate(571, 449);
@@ -83,12 +91,16 @@ int main() {
         float ballScale = (SCALE_TIME_HIT - scale) / 5 + 0.1;
 
         Component scaledAirplane = airplane;
+        Component scaledWindows = windows;
+        Component scaledPilot = pilot;
         Component scaledPropellerLeft = propellerLeft, scaledPropellerRight = propellerRight;
         Component scaledWheelLeft = wheelLeft, scaledWheelRight = wheelRight;
         Component scaledCannonBall = cannonBall;
 
         // Scale components
         scaledAirplane.scale(origin, scale, scale);
+        scaledWindows.scale(origin, scale,scale);
+        scaledPilot.scale(origin, scale,scale);
         scaledPropellerLeft.scale(origin, scale, scale);
         scaledPropellerRight.scale(origin, scale, scale);
         scaledWheelLeft.scale(origin, scale, scale);
@@ -135,6 +147,8 @@ int main() {
 
         canvas.clear();
         renderer.renderToCanvas(scaledAirplane.clip(clippingPlane), &canvas);
+        renderer.renderToCanvas(scaledWindows.clip(clippingPlane), &canvas);
+        renderer.renderToCanvas(scaledPilot.clip(clippingPlane), &canvas);
         renderer.renderToCanvas(scaledPropellerLeft.clip(clippingPlane), &canvas);
         renderer.renderToCanvas(scaledPropellerRight.clip(clippingPlane), &canvas);
         renderer.renderToCanvas(scaledWheelLeft.clip(clippingPlane), &canvas);
