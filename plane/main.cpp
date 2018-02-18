@@ -49,7 +49,7 @@ int main() {
     propellerRight.translate(618, 405);
     wheelLeft.translate(571, 449);
     wheelRight.translate(591, 449);
-    cannonBall.translate(618, 800);
+    cannonBall.translate(620, 800);
     parachute.translate(200, -200);
 
     // Render every component
@@ -57,6 +57,9 @@ int main() {
     Point ballOrigin(653, 0);
     float scale = 1;
     float rotation = 0;
+
+    bool hit = false;
+    bool once = false;
     while (1) {
         scale += 0.1;
         rotation += 10;
@@ -73,16 +76,38 @@ int main() {
         scaledPropellerLeft.scale(origin, scale, scale);
         scaledPropellerRight.scale(origin, scale, scale);
         scaledWheelLeft.scale(origin, scale, scale);
-        if (scale < SCALE_TIME_HIT)
-            scaledWheelRight.scale(origin, scale, scale);
-        else if (scale < SCALE_TIME_HIT + ERROR_TIME_HIT)
-            wheelRight.scale(origin, scale, scale);
+
 
         scaledCannonBall.scale(ballOrigin, ballScale, ballScale);
-        scaledCannonBall.translate(27, 80);
+        scaledCannonBall.translate(100, 80);
+
+        if (!hit) {
+            scaledWheelRight.scale(origin, scale, scale);
+            Point topLeftWheel = scaledWheelRight.getTopLeftPosition();
+            Point bottomRightWheel = scaledWheelRight.getBottomRightPosition();
+            // Point topRightWheel(bottomRightWheel.getX(), topLeftWheel.getY());
+            // Point bottomLeftWheel(topLeftWheel.getX(), bottomRightWheel.getY());
+            Point topLeftCannonball = scaledCannonBall.getTopLeftPosition();
+            Point bottomRightCannonball = scaledCannonBall.getBottomRightPosition();
+            Point topRightCannonball(bottomRightCannonball.getX(), topLeftCannonball.getY());
+            Point bottomLeftCannonball(topLeftCannonball.getX(), bottomRightCannonball.getY());
+            // cout << "cannon" << topRightCannonball.getX() << "," << topRightCannonball.getY() << endl;
+            if (topRightCannonball.getX() > topLeftWheel.getX() && topRightCannonball.getX() < bottomRightWheel.getX() &&
+                topRightCannonball.getY() > topLeftWheel.getY() && topRightCannonball.getY() < bottomRightWheel.getY()) {
+                hit = true;
+                once = true;
+            }
+        } else if (once) {
+            wheelRight.scale(origin, scale, scale);
+            once = false;
+        }
+        // if (scale < SCALE_TIME_HIT)
+        //     scaledWheelRight.scale(origin, scale, scale);
+        // else if (scale < SCALE_TIME_HIT + ERROR_TIME_HIT)
+        //     wheelRight.scale(origin, scale, scale);
 
         // When the cannonball hits the wheel
-        if (scale >= SCALE_TIME_HIT) {
+        if (/*scale >= SCALE_TIME_HIT*/ hit) {
             wheelRight.update();
             if (wheelRight.getBottomRightPosition().getY() > V_SIZE) {
                 wheelRight.bounce();
@@ -107,7 +132,7 @@ int main() {
         renderer.renderToCanvas(scaledPropellerLeft, &canvas);
         renderer.renderToCanvas(scaledPropellerRight, &canvas);
         renderer.renderToCanvas(scaledWheelLeft, &canvas);
-        if (scale < SCALE_TIME_HIT) {
+        if (/*scale < SCALE_TIME_HIT*/ !hit) {
             renderer.renderToCanvas(scaledCannonBall, &canvas);
             renderer.renderToCanvas(scaledWheelRight, &canvas);
         } else {
