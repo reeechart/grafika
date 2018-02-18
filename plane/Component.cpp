@@ -350,9 +350,9 @@ class Component {
 
 			newComponent.setPlane(newPlane);
 
-			for (auto& line : newComponent.getPlane().getLines()) {
-		        cout << line.getP1().getX() << "," << line.getP1().getY() << " " << line.getP2().getX() << "," << line.getP2().getY() << endl;
-		    }
+			// for (auto& line : newComponent.getPlane().getLines()) {
+		 //        cout << line.getP1().getX() << "," << line.getP1().getY() << " " << line.getP2().getX() << "," << line.getP2().getY() << endl;
+		 //    }
 
 			return newComponent;
 
