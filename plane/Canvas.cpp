@@ -5,8 +5,8 @@
 
 #include <iostream>
 
-#define V_SIZE 700
-#define H_SIZE 1366
+#define V_SIZE 500
+#define H_SIZE 1360
 #define GROUND_HEIGHT 10
 
 class Canvas {
@@ -28,7 +28,7 @@ class Canvas {
 					if (x < cliffLength)
 						colorMap[y][x] = Color();
 					else
-						colorMap[y][x] = grassColor;
+						colorMap[y][x] = Color(); //grassColor
 				}
 			}
 		}
@@ -53,7 +53,7 @@ class Canvas {
 					if (x < cliffLength)
 						colorMap[y][x] = Color();
 					else
-						colorMap[y][x] = grassColor;
+						colorMap[y][x] = Color(); //grassColor
 				}
 			}
 		}

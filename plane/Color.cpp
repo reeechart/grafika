@@ -22,6 +22,12 @@ class Color {
 			this->blue = color.blue;
 		}
 
+		Color& operator=(const Color& color) {
+			this->red = color.red;
+			this->green = color.green;
+			this->blue = color.blue;
+		}
+
 		// getter
 		short getRedValue() {
 			return red;
