@@ -5,6 +5,7 @@
 #include "Canvas.cpp"
 #include "ClippingPlane.cpp"
 #include <algorithm>
+#include <set>
 
 class Component {
 	private:
@@ -129,7 +130,7 @@ class Component {
 			return plane;
 		}
 
-		Point getFloodfillStartPoint() {
+		vector<Point> getFloodfillStartPoint() {
 			// Point topLeftPoint = Point(9999, 9999);
 			// for (auto& line : plane.getLines()) {
 			// 	if (line.getP1().getY() < topLeftPoint.getY()) {
@@ -150,59 +151,70 @@ class Component {
 			// 	return Point(((topLeftPosition.getX() + bottomRightPosition.getX()) / 2),
 			// 		((topLeftPosition.getY() + 3 * bottomRightPosition.getY()) / 4));
 
-			Point closerPoint;
+			vector<Point> points;
+			vector<pair<Point, pair<int, int>>> closerPointVector;
 			int distanceMin = 9999999;
 			short quadran;
 			Point topRightPosition = Point(bottomRightPosition.getX(), topLeftPosition.getY());
 			Point bottomLeftPosition = Point(topLeftPosition.getX(), bottomRightPosition.getY());
 			for (auto& line : plane.getLines()) {
-				if (line.getP1().distance(topLeftPosition) < distanceMin) {
+				Point closerPoint;
+				if (line.getP1().distance(topLeftPosition) <= distanceMin) {
 					closerPoint = line.getP1();
 					distanceMin = line.getP1().distance(topLeftPosition);
 					quadran = 2;
-				} else if (line.getP1().distance(topRightPosition) < distanceMin) {
+				} else if (line.getP1().distance(topRightPosition) <= distanceMin) {
 					closerPoint = line.getP1();
 					distanceMin = line.getP1().distance(topRightPosition);
 					quadran = 1;
-				} else if (line.getP1().distance(bottomRightPosition) < distanceMin) {
+				} else if (line.getP1().distance(bottomRightPosition) <= distanceMin) {
 					closerPoint = line.getP1();
 					distanceMin = line.getP1().distance(bottomRightPosition);
 					quadran = 4;
-				} else if (line.getP1().distance(bottomLeftPosition) < distanceMin) {
+				} else if (line.getP1().distance(bottomLeftPosition) <= distanceMin) {
 					closerPoint = line.getP1();
 					distanceMin = line.getP1().distance(bottomLeftPosition);
 					quadran = 3;
 				}
 
-				if (line.getP2().distance(topLeftPosition) < distanceMin) {
+				if (line.getP2().distance(topLeftPosition) <= distanceMin) {
 					closerPoint = line.getP2();
 					distanceMin = line.getP2().distance(topLeftPosition);
 					quadran = 2;
-				} else if (line.getP2().distance(topRightPosition) < distanceMin) {
+				} else if (line.getP2().distance(topRightPosition) <= distanceMin) {
 					closerPoint = line.getP2();
 					distanceMin = line.getP2().distance(topRightPosition);
 					quadran = 1;
-				} else if (line.getP2().distance(bottomRightPosition) < distanceMin) {
+				} else if (line.getP2().distance(bottomRightPosition) <= distanceMin) {
 					closerPoint = line.getP2();
 					distanceMin = line.getP2().distance(bottomRightPosition);
 					quadran = 4;
-				} else if (line.getP2().distance(bottomLeftPosition) < distanceMin) {
+				} else if (line.getP2().distance(bottomLeftPosition) <= distanceMin) {
 					closerPoint = line.getP2();
 					distanceMin = line.getP2().distance(bottomLeftPosition);
 					quadran = 3;
 				}
+				closerPointVector.push_back(make_pair(closerPoint, make_pair(distanceMin, quadran)));
 			}
 
-			if (quadran == 1) {
-				closerPoint.translate(-2, 2);
-			} else if (quadran == 2) {
-				closerPoint.translate(2, 2);
-			} else if (quadran == 3) {
-				closerPoint.translate(2, -2);
-			} else if (quadran == 4) {
-				closerPoint.translate(-2, -2);
+			for (auto & item : closerPointVector) {
+				if (item.second.first == distanceMin) {
+					quadran = item.second.second;
+					Point closerPoint = item.first;
+					if (quadran == 1) {
+						closerPoint.translate(-2, 2);
+					} else if (quadran == 2) {
+						closerPoint.translate(2, 2);
+					} else if (quadran == 3) {
+						closerPoint.translate(2, -2);
+					} else if (quadran == 4) {
+						closerPoint.translate(-2, -2);
+					}
+					points.push_back(closerPoint);
+				}
 			}
-			return closerPoint;
+
+			return points;
 		}
 
 		Point getTopLeftPosition() {

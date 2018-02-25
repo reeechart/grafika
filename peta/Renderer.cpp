@@ -146,7 +146,9 @@ class Renderer {
             // EXPERIMENT
             // int midI = (component.getBottomRightPosition().getY() + component.getTopLeftPosition().getY()) / 2;
             // int midJ = (component.getBottomRightPosition().getX() + component.getTopLeftPosition().getX()) / 2;
-            floodFill(canvas, component, component.getFloodfillStartPoint().getY(), component.getFloodfillStartPoint().getX(), component.getColor(), component.getBorderColor());
+            for (auto& point : component.getFloodfillStartPoint()) {
+                floodFill(canvas, component, point.getY(), point.getX(), component.getColor(), component.getBorderColor());
+            }
             for(auto& line : component.getPlane().getLines() ) {
                 for(auto& point : line.getAllPoints()) {
                     canvas->setColor(point.getY(), point.getX(), component.getBorderColor());
