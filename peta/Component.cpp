@@ -130,20 +130,79 @@ class Component {
 		}
 
 		Point getFloodfillStartPoint() {
-			Point topLeftPoint = Point(9999, 9999);
+			// Point topLeftPoint = Point(9999, 9999);
+			// for (auto& line : plane.getLines()) {
+			// 	if (line.getP1().getY() < topLeftPoint.getY()) {
+			// 		topLeftPoint = line.getP1();
+			// 	} else if (line.getP1().getY() == topLeftPoint.getY() && line.getP1().getX() < topLeftPoint.getX()) {
+			// 		topLeftPoint = line.getP1();
+			// 	}
+			// 	if (line.getP2().getY() < topLeftPoint.getY()) {
+			// 		topLeftPoint = line.getP2();
+			// 	} else if (line.getP2().getY() == topLeftPoint.getY()  && line.getP2().getX() < topLeftPoint.getX()) {
+			// 		topLeftPoint = line.getP2();
+			// 	}
+			// }
+			// if (topLeftPoint.getX() < (topLeftPosition.getX() + bottomRightPosition.getX()) / 2)
+			// 	return Point(topLeftPoint.getX() + 1, topLeftPoint.getY() + 1);
+			// else
+			// 	// return Point(-1, -1);
+			// 	return Point(((topLeftPosition.getX() + bottomRightPosition.getX()) / 2),
+			// 		((topLeftPosition.getY() + 3 * bottomRightPosition.getY()) / 4));
+
+			Point closerPoint;
+			int distanceMin = 9999999;
+			short quadran;
+			Point topRightPosition = Point(bottomRightPosition.getX(), topLeftPosition.getY());
+			Point bottomLeftPosition = Point(topLeftPosition.getX(), bottomRightPosition.getY());
 			for (auto& line : plane.getLines()) {
-				if (line.getP1().getY() < topLeftPoint.getY()) {
-					topLeftPoint = line.getP1();
-				} else if (line.getP1().getY() == topLeftPoint.getY() && line.getP1().getX() < topLeftPoint.getX()) {
-					topLeftPoint = line.getP1();
+				if (line.getP1().distance(topLeftPosition) < distanceMin) {
+					closerPoint = line.getP1();
+					distanceMin = line.getP1().distance(topLeftPosition);
+					quadran = 2;
+				} else if (line.getP1().distance(topRightPosition) < distanceMin) {
+					closerPoint = line.getP1();
+					distanceMin = line.getP1().distance(topRightPosition);
+					quadran = 1;
+				} else if (line.getP1().distance(bottomRightPosition) < distanceMin) {
+					closerPoint = line.getP1();
+					distanceMin = line.getP1().distance(bottomRightPosition);
+					quadran = 4;
+				} else if (line.getP1().distance(bottomLeftPosition) < distanceMin) {
+					closerPoint = line.getP1();
+					distanceMin = line.getP1().distance(bottomLeftPosition);
+					quadran = 3;
 				}
-				if (line.getP2().getY() < topLeftPoint.getY()) {
-					topLeftPoint = line.getP2();
-				} else if (line.getP2().getY() == topLeftPoint.getY()  && line.getP2().getX() < topLeftPoint.getX()) {
-					topLeftPoint = line.getP2();
+
+				if (line.getP2().distance(topLeftPosition) < distanceMin) {
+					closerPoint = line.getP2();
+					distanceMin = line.getP2().distance(topLeftPosition);
+					quadran = 2;
+				} else if (line.getP2().distance(topRightPosition) < distanceMin) {
+					closerPoint = line.getP2();
+					distanceMin = line.getP2().distance(topRightPosition);
+					quadran = 1;
+				} else if (line.getP2().distance(bottomRightPosition) < distanceMin) {
+					closerPoint = line.getP2();
+					distanceMin = line.getP2().distance(bottomRightPosition);
+					quadran = 4;
+				} else if (line.getP2().distance(bottomLeftPosition) < distanceMin) {
+					closerPoint = line.getP2();
+					distanceMin = line.getP2().distance(bottomLeftPosition);
+					quadran = 3;
 				}
-			}			
-			return Point(topLeftPoint.getX() + 3, topLeftPoint.getY() + 3);
+			}
+
+			if (quadran == 1) {
+				closerPoint.translate(-2, 2);
+			} else if (quadran == 2) {
+				closerPoint.translate(2, 2);
+			} else if (quadran == 3) {
+				closerPoint.translate(2, -2);
+			} else if (quadran == 4) {
+				closerPoint.translate(-2, -2);
+			}
+			return closerPoint;
 		}
 
 		Point getTopLeftPosition() {

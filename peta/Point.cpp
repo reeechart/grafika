@@ -64,6 +64,11 @@ class Point {
 			return x == point.x && y == point.y;
 		}
 
+		int distance(Point point) {
+			return (int)(point.x - this->x) * (int)(point.x - this->x) + 
+				(int)(point.y - this->y) * (int)(point.y - this->y);
+		}
+
 };
 
 #endif
