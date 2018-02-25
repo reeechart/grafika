@@ -64,6 +64,8 @@ void* readInput(void *arg) {
                     if (offsetY + sizeY >= 450 || offsetX + sizeX >= 450) {
                         sizeY = 450 - 1 - offsetY;
                         sizeX = 450 - 1 - offsetX;
+                        if (sizeY > sizeX) sizeY = sizeX;
+                        if (sizeX > sizeY) sizeX = sizeY;
                     }
                 } else if (ch == 'x') {
                     --sizeX;

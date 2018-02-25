@@ -40,6 +40,7 @@ class Reader {
 
                     int linesPosition = line.find(" d=\"") + string(" d=\"").length();
                     int index = linesPosition + 1;
+                    Point veryFirstPoint;
                     Point firstPoint, secondPoint;
                     bool first = true;
                     bool negative;
@@ -79,8 +80,11 @@ class Reader {
                         firstPoint = secondPoint;
                         secondPoint.translate(dx, dy);
                         if (!first) {
+                            if (line[index] == 'z')
+                                secondPoint = veryFirstPoint;
                             plane.addLine(Line(firstPoint, secondPoint));
                         } else {
+                            veryFirstPoint = secondPoint;
                             first = false;
                         }
                         if (line[index] == 'z') {
