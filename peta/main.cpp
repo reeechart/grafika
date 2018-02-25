@@ -110,7 +110,7 @@ int main() {
         dy = canvasCenter.getY() - offsetY - sizeY / 2; 
 
         copyLayer.translate(dx, dy);
-        copyLayer.scale(canvasCenter, floor((float) 400 / sizeX), floor((float) 400 / sizeY) - 0.1);
+        copyLayer.scale(canvasCenter, ((float) 400 / sizeX), ((float) 400 / sizeY));
 
         renderer.renderToCanvas(layer, &miniMapCanvas);
         renderer.renderToCanvas(copyLayer, &mapCanvas);
