@@ -9,11 +9,17 @@
 
 bool isZoomed = false;
 pthread_t tid[2];
+float zoom = 1;
 
 void* readInput(void *arg) {
     while (1) {
-        if (cin.get()) {
-            isZoomed = !isZoomed;        }
+        char input = getchar();
+        if (input == 'z') {
+            zoom += 0.1;
+        } else if (input == 'x') {
+            if (zoom > 0.1)
+                zoom -= 0.1;
+        }        
     }
 
     return NULL;
@@ -85,7 +91,6 @@ int main() {
     float rotation = 0;
     bool hit = false;
     bool once = false;
-    float zoom = 1.5;
     while (1) {
         scale += 0.1;
         rotation += 10;
@@ -145,11 +150,7 @@ int main() {
             }
 
             parachute.translate(0, 2);
-        }
-
-        // Rotate propellers
-        scaledPropellerLeft.rotateAgainstCenter(rotation);
-        scaledPropellerRight.rotateAgainstCenter(rotation);        
+        }     
 
         if ((int) scale % 2 == 0) {
             parachute.rotateAgainstCenter(1);
@@ -159,7 +160,7 @@ int main() {
 
         Component scaledParachute = parachute;
 
-        if (isZoomed) {
+        // if (isZoomed) {
         	scaledAirplane.scale(origin, zoom, zoom);
         	scaledWindows.scale(origin, zoom, zoom);
         	scaledPilot.scale(origin, zoom, zoom);
@@ -169,12 +170,18 @@ int main() {
             scaledWheelRight.scale(origin, zoom, zoom);
 	        scaledCannonBall.scale(origin, zoom, zoom);
 	        scaledParachute.scale(origin, zoom, zoom);
-        }
+        // }
+
+
+        // Rotate propellers
+        scaledPropellerLeft.rotateAgainstCenter(rotation);
+        scaledPropellerRight.rotateAgainstCenter(rotation);   
 
         canvas.clear();
         renderer.renderToCanvas(scaledAirplane.clip(clippingPlane), &canvas);
         renderer.renderToCanvas(scaledWindows.clip(clippingPlane), &canvas);
-        renderer.renderToCanvas(scaledPilot.clip(clippingPlane), &canvas);
+        if (!hit)
+            renderer.renderToCanvas(scaledPilot.clip(clippingPlane), &canvas);
         renderer.renderToCanvas(scaledPropellerLeft.clip(clippingPlane), &canvas);
         renderer.renderToCanvas(scaledPropellerRight.clip(clippingPlane), &canvas);
         renderer.renderToCanvas(scaledWheelLeft.clip(clippingPlane), &canvas);
@@ -184,7 +191,8 @@ int main() {
         } else {
             renderer.renderToCanvas(scaledWheelRight.clip(clippingPlane), &canvas);
         }
-        renderer.renderToCanvas(scaledParachute.clip(clippingPlane), &canvas);
+        if (hit)
+            renderer.renderToCanvas(scaledParachute.clip(clippingPlane), &canvas);
 
         renderer.copyToFrameBuffer(canvas);
 
