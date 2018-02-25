@@ -22,7 +22,7 @@ class Canvas {
 			for (int i = 0; i < getHeight(); ++i) {
 				colorMap[i] = new Color[getWidth()];
 				for (int j = 0; j < getWidth(); ++j) {
-					colorMap[i][j] = Color(30, 30, 30);
+					colorMap[i][j] = Color();
 				}
 			}
 		}
@@ -51,7 +51,7 @@ class Canvas {
 		void clear() {
 			for (int y = 0; y < getHeight(); y++) {
 				for (int x = 0; x < getWidth(); x++) {
-					colorMap[y][x] = Color(30, 30, 30);
+					colorMap[y][x] = Color();
 				}
 			}
 		}

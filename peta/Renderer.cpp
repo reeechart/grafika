@@ -13,6 +13,7 @@
 #include <sys/mman.h>
 #include <sys/ioctl.h>
 #include <algorithm>
+#include <stack>
 
 #include <iostream>
 using namespace std;
@@ -113,19 +114,24 @@ class Renderer {
         }
 
         void floodFill(Canvas *canvas, Component component, int i, int j, Color color, Color borderColor) {
-            if (i >= component.getTopLeftPosition().getY() && j >= component.getTopLeftPosition().getX() &&
-                 i <= component.getBottomRightPosition().getY() && j <= component.getBottomRightPosition().getX()) {
-                if (!canvas->getColor(i, j).isEqual(color) && !canvas->getColor(i, j).isEqual(borderColor)) {
-                    canvas->setColor(i, j, color);
+            stack<pair<short, short> > toBeColored;
+            toBeColored.push(make_pair(i, j));
+            while (!toBeColored.empty()) {
+                pair<short, short> colorPosition = toBeColored.top();
+                toBeColored.pop();
+                //cout << colorPosition.first << " " << colorPosition.second << endl;
+                if (colorPosition.first >= component.getTopLeftPosition().getY() && colorPosition.second >= component.getTopLeftPosition().getX() &&
+                colorPosition.first <= component.getBottomRightPosition().getY() && colorPosition.second <= component.getBottomRightPosition().getX()) {
+                    canvas->setColor(colorPosition.first, colorPosition.second, color);
 
-                    if (!canvas->getColor(i - 1, j).isEqual(color) && !canvas->getColor(i - 1, j).isEqual(borderColor))
-                        floodFill(canvas, component, i - 1, j, color, borderColor);
-                    if (!canvas->getColor(i, j - 1).isEqual(color) && !canvas->getColor(i, j - 1).isEqual(borderColor))
-                       floodFill(canvas, component, i, j - 1, color, borderColor);
-                    if (!canvas->getColor(i, j + 1).isEqual(color) && !canvas->getColor(i, j + 1).isEqual(borderColor))
-                       floodFill(canvas, component, i, j + 1, color, borderColor);
-                    if (!canvas->getColor(i + 1, j).isEqual(color) && !canvas->getColor(i + 1, j).isEqual(borderColor))
-                        floodFill(canvas, component, i + 1, j, color, borderColor);
+                    if (!canvas->getColor(colorPosition.first - 1, colorPosition.second).isEqual(color) && !canvas->getColor(colorPosition.first - 1, colorPosition.second).isEqual(borderColor))
+                        toBeColored.push(make_pair(colorPosition.first - 1, colorPosition.second));
+                    if (!canvas->getColor(colorPosition.first, colorPosition.second - 1).isEqual(color) && !canvas->getColor(colorPosition.first, colorPosition.second - 1).isEqual(borderColor))
+                        toBeColored.push(make_pair(colorPosition.first, colorPosition.second - 1));
+                    if (!canvas->getColor(colorPosition.first, colorPosition.second + 1).isEqual(color) && !canvas->getColor(colorPosition.first, colorPosition.second + 1).isEqual(borderColor))
+                        toBeColored.push(make_pair(colorPosition.first, colorPosition.second + 1));
+                    if (!canvas->getColor(colorPosition.first + 1, colorPosition.second).isEqual(color) && !canvas->getColor(colorPosition.first + 1, colorPosition.second).isEqual(borderColor))
+                        toBeColored.push(make_pair(colorPosition.first + 1, colorPosition.second));
                 }
             }
         }
@@ -136,11 +142,11 @@ class Renderer {
                     canvas->setColor(point.getY(), point.getX(), component.getColor());
                 }
             }
-            // scanLineComponent(component, canvas);
+            scanLineComponent(component, canvas);
             // EXPERIMENT
             // int midI = (component.getBottomRightPosition().getY() + component.getTopLeftPosition().getY()) / 2;
             // int midJ = (component.getBottomRightPosition().getX() + component.getTopLeftPosition().getX()) / 2;
-            floodFill(canvas, component, component.getFloodfillStartPoint().getY(), component.getFloodfillStartPoint().getX(), component.getColor(), component.getBorderColor());
+            //floodFill(canvas, component, component.getFloodfillStartPoint().getY(), component.getFloodfillStartPoint().getX(), component.getColor(), component.getBorderColor());
             for(auto& line : component.getPlane().getLines() ) {
                 for(auto& point : line.getAllPoints()) {
                     canvas->setColor(point.getY(), point.getX(), component.getBorderColor());

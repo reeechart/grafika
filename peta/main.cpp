@@ -59,15 +59,15 @@ void* readInput(void *arg) {
                 }
             } else {
                 if (ch == 'z') {
-                    sizeX *= 1.1;
-                    sizeY *= 1.1;
+                    ++sizeX;
+                    ++sizeY;
                     if (offsetY + sizeY >= 450 || offsetX + sizeX >= 450) {
                         sizeY = 450 - 1 - offsetY;
                         sizeX = 450 - 1 - offsetX;
                     }
                 } else if (ch == 'x') {
-                    sizeX /= 1.1;
-                    sizeY /= 1.1;
+                    --sizeX;
+                    --sizeY;
                     if (sizeX < 10) sizeX = 10;
                     if (sizeY < 10) sizeY = 10;
                 }
@@ -108,7 +108,7 @@ int main() {
         dy = canvasCenter.getY() - offsetY - sizeY / 2; 
 
         copyLayer.translate(dx, dy);
-        copyLayer.scale(canvasCenter, 8, 8);
+        copyLayer.scale(canvasCenter, floor((float) 400 / sizeX), floor((float) 400 / sizeY) - 0.1);
 
         renderer.renderToCanvas(layer, &miniMapCanvas);
         renderer.renderToCanvas(copyLayer, &mapCanvas);
