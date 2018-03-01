@@ -15,6 +15,11 @@ class Layer {
         bool visibility;
 
     public:
+        short top;
+        short bottom;
+        short left;
+        short right;
+
         //ctor
         Layer() {
             visibility = true;
@@ -24,11 +29,19 @@ class Layer {
         Layer(Layer& layer) {
             this->components = layer.components;
             this->visibility = layer.visibility;
+            this->top = layer.top;
+            this->bottom = layer.bottom;
+            this->left = layer.left;
+            this->right = layer.right;
         }
 
         Layer& operator=(const Layer& layer) {
             this->components = layer.components;
             this->visibility = layer.visibility;
+            this->top = layer.top;
+            this->bottom = layer.bottom;
+            this->left = layer.left;
+            this->right = layer.right;
         }
 
         void addComponent(Component& component) {
@@ -63,6 +76,13 @@ class Layer {
             for (auto& component : components) {
                 component.scale(center, scaleX, scaleY);
             }
+        }
+
+        void setEnvelope(int top, int bottom, int left, int right) {
+            this->top = top;
+            this->bottom = bottom;
+            this->left = left;
+            this->right = right;
         }
 };
 

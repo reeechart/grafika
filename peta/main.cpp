@@ -199,10 +199,21 @@ int main() {
     mouseCursor.setBorderColor(Color(0, 0, 0));
 
     // initiate the map
-    reader.readLayer(&layers[0], "assets/peta.svg");
+    reader.readLayer(&layers[0], "assets/layer_gedung.svg");
+    // reader.readLayer(&layers[1], "assets/laye.svg");
     reader.readComponent(&mouseCursor, "assets/wheel.txt");
 
     layers[0].translate(START_X_MINIMAP, START_Y_MINIMAP);
+    for (int i = 0; i < 1; i++) {
+        int dx = MINIMAP_X_SIZE / 2 - (layers[i].right + layers[i].left) / 2;
+        int dy = MINIMAP_Y_SIZE / 2 - (layers[i].top + layers[i].bottom) / 2;
+        cout << dx << " -- " << dy << endl;
+        layers[i].translate(dx, dy);
+        float ratioX = MINIMAP_X_SIZE / (layers[i].right - layers[i].left);
+        float ratioY = MINIMAP_Y_SIZE / (layers[i].bottom - layers[i].top);
+        Point middlePoint(START_X_MINIMAP + MINIMAP_X_SIZE / 2, START_Y_MINIMAP + MINIMAP_Y_SIZE / 2);
+        layers[i].scale(middlePoint, ratioX, ratioY);
+    }
 
     // another thread to read input
     pthread_create(&(tid[0]), NULL, &readInput, NULL);
