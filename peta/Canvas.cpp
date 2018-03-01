@@ -109,6 +109,17 @@ class Canvas {
 				colorMap[posY][posX] = color;
 			}
 		}
+
+		void colorBorder(Color color, int top, int bottom, int left, int right) {
+			for (int i = left; i <= right; i++) {
+				setColor(top, i, color);
+				setColor(bottom, i, color);
+			}
+			for (int j = top; j <= bottom; j++) {
+				setColor(j, left, color);
+				setColor(j, right, color);
+			}
+		}
 };
 
 #endif
