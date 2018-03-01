@@ -26,6 +26,11 @@ class Layer {
             this->visibility = layer.visibility;
         }
 
+        Layer& operator=(const Layer& layer) {
+            this->components = layer.components;
+            this->visibility = layer.visibility;
+        }
+
         void addComponent(Component& component) {
             components.push_back(component);
         }

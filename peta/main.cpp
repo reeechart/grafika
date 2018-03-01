@@ -18,12 +18,19 @@
 #define SCREEN_X_SIZE 1360
 #define SCREEN_Y_SIZE 760
 #define CURSOR_SPEED_ADJUSTMENT 0.5
+#define START_Y_LAYER_BOXES 600
+#define START_X_LAYER_BOXES 10
+#define SIZE_Y_LAYER_BOXES 50
+#define SIZE_X_LAYER_BOXES 180
 
 pthread_t tid[3];
 int offsetX = 0;
 int offsetY = 0;
 int sizeX = 50;
 int sizeY = 50;
+
+// saving all the layers
+Layer layers[7];
 
 int mouseX = 0, mouseY = 0;
 
@@ -113,6 +120,12 @@ void* readMouse(void *arg) {
                     }
                 }
             }
+            if (mouseY > START_Y_LAYER_BOXES && mouseY < START_Y_LAYER_BOXES + SIZE_Y_LAYER_BOXES &&
+                mouseX > START_X_LAYER_BOXES && mouseX < START_X_LAYER_BOXES + 7 * SIZE_X_LAYER_BOXES) {
+                int position = (mouseX - START_X_LAYER_BOXES) / SIZE_X_LAYER_BOXES;
+                // cout << position << endl;
+                layers[position].setVisibility(!layers[position].isVisible());
+            }
         } else {
             dragged = false;
         }
@@ -179,7 +192,6 @@ void* readInput(void *arg) {
 
 
 int main() {
-    Layer layer;
     Reader reader;
     Renderer renderer;
     Component mouseCursor;
@@ -187,10 +199,10 @@ int main() {
     mouseCursor.setBorderColor(Color(0, 0, 0));
 
     // initiate the map
-    reader.readLayer(&layer, "assets/peta.svg");
+    reader.readLayer(&layers[0], "assets/peta.svg");
     reader.readComponent(&mouseCursor, "assets/wheel.txt");
 
-    layer.translate(START_X_MINIMAP, START_Y_MINIMAP);
+    layers[0].translate(START_X_MINIMAP, START_Y_MINIMAP);
 
     // another thread to read input
     pthread_create(&(tid[0]), NULL, &readInput, NULL);
@@ -204,20 +216,26 @@ int main() {
             START_X_MINIMAP + offsetX, START_X_MINIMAP + sizeX + offsetX);
         clippingPlane.setOverlayColor(Color(0, 255, 0));
         
-        Layer copyLayer = layer;
-        copyLayer.clip(clippingPlane);
-
         int dx, dy;
         dx = MINIMAP_X_SIZE / 2 - offsetX - sizeX / 2;
         dy = MINIMAP_Y_SIZE / 2 - offsetY - sizeY / 2;
 
-        copyLayer.translate(dx, dy);
-        copyLayer.scale(Point(MINIMAP_X_SIZE / 2 + START_X_MINIMAP, MINIMAP_Y_SIZE / 2 + START_Y_MINIMAP),
-            ((float) MINIMAP_X_SIZE / sizeX), ((float) MINIMAP_Y_SIZE / sizeY));
-        copyLayer.translate(START_X_MAP - START_X_MINIMAP, START_Y_MAP - START_Y_MINIMAP);
+        Layer copyLayers[7];
+        for (int i = 0; i < 7; i++) {
+            copyLayers[i] = layers[i];
+            if (copyLayers[i].isVisible()) {
+                copyLayers[i].clip(clippingPlane);
 
-        renderer.renderToCanvas(layer, &window);
-        renderer.renderToCanvas(copyLayer, &window);
+                // after clipping, we need to scale and move to map position
+                copyLayers[i].translate(dx, dy);
+                copyLayers[i].scale(Point(MINIMAP_X_SIZE / 2 + START_X_MINIMAP, MINIMAP_Y_SIZE / 2 + START_Y_MINIMAP),
+                    ((float) MINIMAP_X_SIZE / sizeX), ((float) MINIMAP_Y_SIZE / sizeY));
+                copyLayers[i].translate(START_X_MAP - START_X_MINIMAP, START_Y_MAP - START_Y_MINIMAP);
+
+                renderer.renderToCanvas(layers[i], &window);
+                renderer.renderToCanvas(copyLayers[i], &window);
+            }
+        }
         renderer.renderToCanvas(mouseCursorClone, &window);
 
         // color the border of map and minimap
@@ -226,6 +244,12 @@ int main() {
             START_X_MINIMAP, START_X_MINIMAP + MINIMAP_X_SIZE);
         window.colorBorder(borderColor, START_Y_MAP, START_Y_MAP + MAP_Y_SIZE,
             START_X_MAP, START_X_MAP + MAP_X_SIZE);
+
+        for (int i = 0; i < 7; i++) {
+            // coloring layer box border
+            window.colorBorder(borderColor, START_Y_LAYER_BOXES, START_Y_LAYER_BOXES + SIZE_Y_LAYER_BOXES,
+                START_X_LAYER_BOXES + i * SIZE_X_LAYER_BOXES, START_X_LAYER_BOXES + (i + 1) * SIZE_X_LAYER_BOXES);
+        }
 
         window.overlayClippingPlane(clippingPlane);
         renderer.copyToFrameBuffer(window);
