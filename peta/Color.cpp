@@ -34,7 +34,7 @@ class Color {
 		}
 
 		bool isEqual(const Color& color) {
-			return this->red == color.red && this->blue == blue && this->green == green;
+			return this->red == color.red && this->blue == color.blue && this->green == color.green;
 		}
 
 		// getter
