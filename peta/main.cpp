@@ -200,15 +200,15 @@ int main() {
 
     // initiate the map
     reader.readLayer(&layers[0], "assets/layer_gedung.svg");
-    // reader.readLayer(&layers[1], "assets/layer_lapangan.svg");
-    // reader.readLayer(&layers[2], "assets/layer_parkiran.svg");
-    // reader.readLayer(&layers[3], "assets/layer_kolam.svg");
-    // reader.readLayer(&layers[1], "assets/layer_jalan_besar.svg");
-    // reader.readLayer(&layers[5], "assets/layer_jalan_kecil.svg");
-    // reader.readLayer(&layers[6], "assets/layer_jalur_teduh.svg");
+    reader.readLayer(&layers[1], "assets/layer_lapangan.svg");
+    reader.readLayer(&layers[2], "assets/layer_parkiran.svg");
+    reader.readLayer(&layers[3], "assets/layer_kolam.svg");
+    reader.readLayer(&layers[4], "assets/layer_jalan_besar.svg");
+    reader.readLayer(&layers[5], "assets/layer_jalan_kecil.svg");
+    reader.readLayer(&layers[6], "assets/layer_jalur_teduh.svg");
     reader.readComponent(&mouseCursor, "assets/wheel.txt");
 
-    for (int i = 0; i < 1; i++) {
+    for (int i = 0; i < 7; i++) {
         // layers[i].translate(START_X_MINIMAP, START_Y_MINIMAP);
         layers[i].translate(0, -50);
         int dx = MINIMAP_X_SIZE / 2 - (layers[i].right + layers[i].left) / 2;
@@ -219,6 +219,11 @@ int main() {
         // float ratioY = MINIMAP_Y_SIZE / (layers[i].bottom - layers[i].top);
         Point middlePoint(START_X_MINIMAP + MINIMAP_X_SIZE / 2, START_Y_MINIMAP + MINIMAP_Y_SIZE / 2);
         layers[i].scale(middlePoint, 0.6, 0.6);
+        // if (i <= 3)
+        //     layers[i].scale(middlePoint, 0.6, 0.6);
+        // else {
+        //     layers[i].scale(middlePoint, 0.4, 0.4);
+        // }
     }
 
     // another thread to read input
@@ -240,7 +245,7 @@ int main() {
         dy = MINIMAP_Y_SIZE / 2 - offsetY - sizeY / 2;
 
         Layer copyLayers[7];
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 7; i++) {
             copyLayers[i] = layers[i];
             if (copyLayers[i].isVisible()) {
                 copyLayers[i].clip(clippingPlane);
@@ -251,11 +256,13 @@ int main() {
                     ((float) MINIMAP_X_SIZE / sizeX), ((float) MINIMAP_Y_SIZE / sizeY));
                 copyLayers[i].translate(START_X_MAP - START_X_MINIMAP, START_Y_MAP - START_Y_MINIMAP);
 
-                renderer.renderToCanvas(layers[i], &window);
-                renderer.renderToCanvas(copyLayers[i], &window);
+                bool fill = i <= 3;
+
+                renderer.renderToCanvas(layers[i], &window, fill);
+                renderer.renderToCanvas(copyLayers[i], &window, fill);
             }
         }
-        renderer.renderToCanvas(mouseCursorClone, &window);
+        renderer.renderToCanvas(mouseCursorClone, &window, true);
 
         // color the border of map and minimap
         Color borderColor(255, 0, 0);

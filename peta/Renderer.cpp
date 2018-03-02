@@ -136,7 +136,7 @@ class Renderer {
             }
         }
 
-        void renderToCanvas(Component component, Canvas *canvas) {
+        void renderToCanvas(Component component, Canvas *canvas, bool fill) {
             // cout << "HERE" << endl;
             // cout << "top: " << component.getTopLeftPosition().getY() << ", left: " << component.getTopLeftPosition().getX() <<
             //     ", bottom: " << component.getBottomRightPosition().getY() << ", right: " << component.getBottomRightPosition().getX() << endl;
@@ -157,11 +157,12 @@ class Renderer {
             // int midI = (component.getBottomRightPosition().getY() + component.getTopLeftPosition().getY()) / 2;
             // int midJ = (component.getBottomRightPosition().getX() + component.getTopLeftPosition().getX()) / 2;
             // cout << "TEST" << endl;
-            for (auto& point : component.getFloodfillStartPoint()) {
-                // cout << "FLOODFILL START" << endl;
-                floodFill(&componentCanvas, component, point.getY(), point.getX(), component.getColor(), component.getBorderColor());
-                // cout << "END" << endl;
-            }
+            if (fill)
+                for (auto& point : component.getFloodfillStartPoint()) {
+                    // cout << "FLOODFILL START" << endl;
+                    floodFill(&componentCanvas, component, point.getY(), point.getX(), component.getColor(), component.getBorderColor());
+                    // cout << "END" << endl;
+                }
             for (int i = component.getTopLeftPosition().getY(); i <= component.getBottomRightPosition().getY(); i++) {
                 for (int j = component.getTopLeftPosition().getX(); j <= component.getBottomRightPosition().getX(); j++) {
                     // cout << componentCanvas.getOffsetColor(i, j).getRedValue();
@@ -179,10 +180,10 @@ class Renderer {
             }
         }
 
-        void renderToCanvas(Layer& layer, Canvas *canvas) {
+        void renderToCanvas(Layer& layer, Canvas *canvas, bool fill) {
             for (auto& component : layer.getComponents()) {
                 if (component.getPlane().getLines().size() > 0)
-                    renderToCanvas(component, canvas);
+                    renderToCanvas(component, canvas, fill);
             }
         }
 
