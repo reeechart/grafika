@@ -124,6 +124,14 @@ class Canvas {
 				setColor(j, right, color);
 			}
 		}
+
+		void fill(Color color, int top, int bottom, int left, int right) {
+			for (int j = top + 1; j < bottom; j++) {
+				for (int i = left + 1; i < right; i++) {
+					setColor(j, i, color);
+				}
+			}
+		}
 };
 
 #endif

@@ -29,6 +29,8 @@ int offsetY = 0;
 int sizeX = 50;
 int sizeY = 50;
 
+Color colors[7];
+
 // saving all the layers
 Layer layers[7];
 
@@ -182,6 +184,8 @@ void* readInput(void *arg) {
                     --sizeY;
                     if (sizeX < 10) sizeX = 10;
                     if (sizeY < 10) sizeY = 10;
+                } else if (ch >= '1' && ch <= '7') {
+                    layers[ch - '1'].setVisibility(!layers[ch - '1'].isVisible());
                 }
             }
         }
@@ -209,6 +213,7 @@ int main() {
     reader.readComponent(&mouseCursor, "assets/wheel.txt");
 
     for (int i = 0; i < 7; i++) {
+        colors[i] = layers[i].getComponents()[0].getBorderColor();
         // layers[i].translate(START_X_MINIMAP, START_Y_MINIMAP);
         layers[i].translate(0, -50);
         int dx = MINIMAP_X_SIZE / 2 - (layers[i].right + layers[i].left) / 2;
@@ -274,6 +279,8 @@ int main() {
         for (int i = 0; i < 7; i++) {
             // coloring layer box border
             window.colorBorder(borderColor, START_Y_LAYER_BOXES, START_Y_LAYER_BOXES + SIZE_Y_LAYER_BOXES,
+                START_X_LAYER_BOXES + i * SIZE_X_LAYER_BOXES, START_X_LAYER_BOXES + (i + 1) * SIZE_X_LAYER_BOXES);
+            window.fill(colors[i], START_Y_LAYER_BOXES, START_Y_LAYER_BOXES + SIZE_Y_LAYER_BOXES,
                 START_X_LAYER_BOXES + i * SIZE_X_LAYER_BOXES, START_X_LAYER_BOXES + (i + 1) * SIZE_X_LAYER_BOXES);
         }
 
