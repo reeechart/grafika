@@ -203,21 +203,22 @@ int main() {
     // reader.readLayer(&layers[1], "assets/layer_lapangan.svg");
     // reader.readLayer(&layers[2], "assets/layer_parkiran.svg");
     // reader.readLayer(&layers[3], "assets/layer_kolam.svg");
-    //reader.readLayer(&layers[4], "assets/layer_jalan_besar.svg");
-    //reader.readLayer(&layers[4], "assets/layer_jalan_kecil.svg");
-    // reader.readLayer(&layers[4], "assets/layer_jalur_teduh.svg");
+    // reader.readLayer(&layers[1], "assets/layer_jalan_besar.svg");
+    // reader.readLayer(&layers[5], "assets/layer_jalan_kecil.svg");
+    // reader.readLayer(&layers[6], "assets/layer_jalur_teduh.svg");
     reader.readComponent(&mouseCursor, "assets/wheel.txt");
 
     for (int i = 0; i < 1; i++) {
-        layers[i].translate(START_X_MINIMAP, START_Y_MINIMAP);
-        // int dx = MINIMAP_X_SIZE / 2 - (layers[i].right + layers[i].left) / 2;
-        // int dy = MINIMAP_Y_SIZE / 2 - (layers[i].top + layers[i].bottom) / 2;
-        // cout << dx << " -- " << dy << endl;
-        // // layers[i].translate(dx, dy);
+        // layers[i].translate(START_X_MINIMAP, START_Y_MINIMAP);
+        layers[i].translate(0, -50);
+        int dx = MINIMAP_X_SIZE / 2 - (layers[i].right + layers[i].left) / 2;
+        int dy = MINIMAP_Y_SIZE / 2 - (layers[i].top + layers[i].bottom) / 2;
+        cout << dx << " -- " << dy << endl;
+        // layers[i].translate(dx, dy);
         // float ratioX = MINIMAP_X_SIZE / (layers[i].right - layers[i].left);
         // float ratioY = MINIMAP_Y_SIZE / (layers[i].bottom - layers[i].top);
-        // Point middlePoint(START_X_MINIMAP + MINIMAP_X_SIZE / 2, START_Y_MINIMAP + MINIMAP_Y_SIZE / 2);
-        // layers[i].scale(middlePoint, ratioX, ratioY);
+        Point middlePoint(START_X_MINIMAP + MINIMAP_X_SIZE / 2, START_Y_MINIMAP + MINIMAP_Y_SIZE / 2);
+        layers[i].scale(middlePoint, 0.6, 0.6);
     }
 
     // another thread to read input
@@ -239,7 +240,7 @@ int main() {
         dy = MINIMAP_Y_SIZE / 2 - offsetY - sizeY / 2;
 
         Layer copyLayers[7];
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 1; i++) {
             copyLayers[i] = layers[i];
             if (copyLayers[i].isVisible()) {
                 copyLayers[i].clip(clippingPlane);

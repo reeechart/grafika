@@ -202,13 +202,13 @@ class Component {
 					quadran = item.second.second;
 					Point closerPoint = item.first;
 					if (quadran == 1) {
-						closerPoint.translate(-2, 2);
+						closerPoint.translate(-1, 1);
 					} else if (quadran == 2) {
-						closerPoint.translate(2, 2);
+						closerPoint.translate(1, 1);
 					} else if (quadran == 3) {
-						closerPoint.translate(2, -2);
+						closerPoint.translate(1, -1);
 					} else if (quadran == 4) {
-						closerPoint.translate(-2, -2);
+						closerPoint.translate(-1, -1);
 					}
 					points.push_back(closerPoint);
 				}
@@ -317,6 +317,11 @@ class Component {
 			newComponent.color.setRedValue(color.getRedValue());
 			newComponent.color.setGreenValue(color.getGreenValue());
 			newComponent.color.setBlueValue(color.getBlueValue());
+			newComponent.borderColor.setRedValue(borderColor.getRedValue());
+			newComponent.borderColor.setGreenValue(borderColor.getGreenValue());
+			newComponent.borderColor.setBlueValue(borderColor.getBlueValue());
+			newComponent.topLeftPosition = this->topLeftPosition;
+			newComponent.bottomRightPosition = this->bottomRightPosition;
 			Plane newPlane;
 			vector<short> topX, bottomX, leftY, rightY;
 
@@ -457,6 +462,7 @@ class Component {
             }
 
 			newComponent.setPlane(newPlane);
+			newComponent.updateEnvelope();
 
 			// for (auto& line : newComponent.getPlane().getLines()) {
 		 //        cout << line.getP1().getX() << "," << line.getP1().getY() << " " << line.getP2().getX() << "," << line.getP2().getY() << endl;

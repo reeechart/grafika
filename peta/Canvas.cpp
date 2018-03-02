@@ -15,14 +15,14 @@ class Canvas {
 
 	public:
 		// ctor
-		Canvas(Point topLeftPosition, Point bottomRightPosition) {
+		Canvas(Point topLeftPosition, Point bottomRightPosition, Color color = Color()) {
 			this->topLeftPosition = topLeftPosition;
 			this->bottomRightPosition = bottomRightPosition;
 			colorMap = new Color*[getHeight()];
 			for (int i = 0; i < getHeight(); ++i) {
 				colorMap[i] = new Color[getWidth()];
 				for (int j = 0; j < getWidth(); ++j) {
-					colorMap[i][j] = Color();
+					colorMap[i][j] = color;
 				}
 			}
 		}
@@ -76,15 +76,15 @@ class Canvas {
 		}
 
 		Color getOffsetColor(int posY, int posX) {
-			return colorMap[posY - getTop()][posX - getLeft()];
+			return getColor(posY - getTop(), posX - getLeft());
 		}
 
 		short getHeight() {
-			return bottomRightPosition.getY() - topLeftPosition.getY();
+			return bottomRightPosition.getY() - topLeftPosition.getY() + 1;
 		}
 
 		short getWidth() {
-			return bottomRightPosition.getX() - topLeftPosition.getX();
+			return bottomRightPosition.getX() - topLeftPosition.getX() + 1;
 		}
 
 		short getTop() {
@@ -108,6 +108,10 @@ class Canvas {
 			if (!(posY >= getHeight() || posY < 0 || posX >= getWidth() || posX < 0)) {
 				colorMap[posY][posX] = color;
 			}
+		}
+
+		void setOffsetColor(int posY, int posX, Color color) {
+			setColor(posY - getTop(), posX - getLeft(), color);
 		}
 
 		void colorBorder(Color color, int top, int bottom, int left, int right) {

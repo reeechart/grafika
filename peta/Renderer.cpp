@@ -122,32 +122,55 @@ class Renderer {
                 //cout << colorPosition.first << " " << colorPosition.second << endl;
                 if (colorPosition.first >= component.getTopLeftPosition().getY() && colorPosition.second >= component.getTopLeftPosition().getX() &&
                 colorPosition.first <= component.getBottomRightPosition().getY() && colorPosition.second <= component.getBottomRightPosition().getX()) {
-                    canvas->setColor(colorPosition.first, colorPosition.second, color);
+                    canvas->setOffsetColor(colorPosition.first, colorPosition.second, color);
 
-                    if (!canvas->getColor(colorPosition.first - 1, colorPosition.second).isEqual(color) && !canvas->getColor(colorPosition.first - 1, colorPosition.second).isEqual(borderColor))
+                    if (!canvas->getOffsetColor(colorPosition.first - 1, colorPosition.second).isEqual(color) && !canvas->getOffsetColor(colorPosition.first - 1, colorPosition.second).isEqual(borderColor))
                         toBeColored.push(make_pair(colorPosition.first - 1, colorPosition.second));
-                    if (!canvas->getColor(colorPosition.first, colorPosition.second - 1).isEqual(color) && !canvas->getColor(colorPosition.first, colorPosition.second - 1).isEqual(borderColor))
+                    if (!canvas->getOffsetColor(colorPosition.first, colorPosition.second - 1).isEqual(color) && !canvas->getOffsetColor(colorPosition.first, colorPosition.second - 1).isEqual(borderColor))
                         toBeColored.push(make_pair(colorPosition.first, colorPosition.second - 1));
-                    if (!canvas->getColor(colorPosition.first, colorPosition.second + 1).isEqual(color) && !canvas->getColor(colorPosition.first, colorPosition.second + 1).isEqual(borderColor))
+                    if (!canvas->getOffsetColor(colorPosition.first, colorPosition.second + 1).isEqual(color) && !canvas->getOffsetColor(colorPosition.first, colorPosition.second + 1).isEqual(borderColor))
                         toBeColored.push(make_pair(colorPosition.first, colorPosition.second + 1));
-                    if (!canvas->getColor(colorPosition.first + 1, colorPosition.second).isEqual(color) && !canvas->getColor(colorPosition.first + 1, colorPosition.second).isEqual(borderColor))
+                    if (!canvas->getOffsetColor(colorPosition.first + 1, colorPosition.second).isEqual(color) && !canvas->getOffsetColor(colorPosition.first + 1, colorPosition.second).isEqual(borderColor))
                         toBeColored.push(make_pair(colorPosition.first + 1, colorPosition.second));
                 }
             }
         }
 
         void renderToCanvas(Component component, Canvas *canvas) {
+            // cout << "HERE" << endl;
+            // cout << "top: " << component.getTopLeftPosition().getY() << ", left: " << component.getTopLeftPosition().getX() <<
+            //     ", bottom: " << component.getBottomRightPosition().getY() << ", right: " << component.getBottomRightPosition().getX() << endl;
+            Canvas componentCanvas(component.getTopLeftPosition(), component.getBottomRightPosition(), Color(-1, -1, -1));
             for(auto& line : component.getPlane().getLines() ) {
                 for(auto& point : line.getAllPoints()) {
-                    canvas->setColor(point.getY(), point.getX(), component.getColor());
+                    componentCanvas.setOffsetColor(point.getY(), point.getX(), component.getBorderColor());
                 }
             }
+            // for (int i = component.getTopLeftPosition().getY(); i <= component.getBottomRightPosition().getY(); i++) {
+            //     for (int j = component.getTopLeftPosition().getX(); j <= component.getBottomRightPosition().getX(); j++) {
+            //         cout << componentCanvas.getOffsetColor(i, j).getRedValue() << " ";
+            //     }
+            //     cout << endl;
+            // }
             // scanLineComponent(component, canvas);
             // EXPERIMENT
             // int midI = (component.getBottomRightPosition().getY() + component.getTopLeftPosition().getY()) / 2;
             // int midJ = (component.getBottomRightPosition().getX() + component.getTopLeftPosition().getX()) / 2;
+            // cout << "TEST" << endl;
             for (auto& point : component.getFloodfillStartPoint()) {
-                floodFill(canvas, component, point.getY(), point.getX(), component.getColor(), component.getBorderColor());
+                // cout << "FLOODFILL START" << endl;
+                floodFill(&componentCanvas, component, point.getY(), point.getX(), component.getColor(), component.getBorderColor());
+                // cout << "END" << endl;
+            }
+            for (int i = component.getTopLeftPosition().getY(); i <= component.getBottomRightPosition().getY(); i++) {
+                for (int j = component.getTopLeftPosition().getX(); j <= component.getBottomRightPosition().getX(); j++) {
+                    // cout << componentCanvas.getOffsetColor(i, j).getRedValue();
+                    if (!componentCanvas.getOffsetColor(i, j).isEqual(Color(-1, -1, -1))) {
+                        // cout << "beda gan : " << i << ", " << j << endl;
+                        canvas->setColor(i, j, componentCanvas.getOffsetColor(i, j));
+                    }
+                }
+                // cout << endl;
             }
             for(auto& line : component.getPlane().getLines() ) {
                 for(auto& point : line.getAllPoints()) {
@@ -158,7 +181,8 @@ class Renderer {
 
         void renderToCanvas(Layer& layer, Canvas *canvas) {
             for (auto& component : layer.getComponents()) {
-                renderToCanvas(component, canvas);
+                if (component.getPlane().getLines().size() > 0)
+                    renderToCanvas(component, canvas);
             }
         }
 
