@@ -200,19 +200,24 @@ int main() {
 
     // initiate the map
     reader.readLayer(&layers[0], "assets/layer_gedung.svg");
-    // reader.readLayer(&layers[1], "assets/laye.svg");
+    // reader.readLayer(&layers[1], "assets/layer_lapangan.svg");
+    // reader.readLayer(&layers[2], "assets/layer_parkiran.svg");
+    // reader.readLayer(&layers[3], "assets/layer_kolam.svg");
+    //reader.readLayer(&layers[4], "assets/layer_jalan_besar.svg");
+    //reader.readLayer(&layers[4], "assets/layer_jalan_kecil.svg");
+    // reader.readLayer(&layers[4], "assets/layer_jalur_teduh.svg");
     reader.readComponent(&mouseCursor, "assets/wheel.txt");
 
-    layers[0].translate(START_X_MINIMAP, START_Y_MINIMAP);
     for (int i = 0; i < 1; i++) {
-        int dx = MINIMAP_X_SIZE / 2 - (layers[i].right + layers[i].left) / 2;
-        int dy = MINIMAP_Y_SIZE / 2 - (layers[i].top + layers[i].bottom) / 2;
-        cout << dx << " -- " << dy << endl;
-        layers[i].translate(dx, dy);
-        float ratioX = MINIMAP_X_SIZE / (layers[i].right - layers[i].left);
-        float ratioY = MINIMAP_Y_SIZE / (layers[i].bottom - layers[i].top);
-        Point middlePoint(START_X_MINIMAP + MINIMAP_X_SIZE / 2, START_Y_MINIMAP + MINIMAP_Y_SIZE / 2);
-        layers[i].scale(middlePoint, ratioX, ratioY);
+        layers[i].translate(START_X_MINIMAP, START_Y_MINIMAP);
+        // int dx = MINIMAP_X_SIZE / 2 - (layers[i].right + layers[i].left) / 2;
+        // int dy = MINIMAP_Y_SIZE / 2 - (layers[i].top + layers[i].bottom) / 2;
+        // cout << dx << " -- " << dy << endl;
+        // // layers[i].translate(dx, dy);
+        // float ratioX = MINIMAP_X_SIZE / (layers[i].right - layers[i].left);
+        // float ratioY = MINIMAP_Y_SIZE / (layers[i].bottom - layers[i].top);
+        // Point middlePoint(START_X_MINIMAP + MINIMAP_X_SIZE / 2, START_Y_MINIMAP + MINIMAP_Y_SIZE / 2);
+        // layers[i].scale(middlePoint, ratioX, ratioY);
     }
 
     // another thread to read input
@@ -225,8 +230,10 @@ int main() {
         mouseCursorClone.translate(mouseX, mouseY);
         ClippingPlane clippingPlane(START_Y_MINIMAP + offsetY, START_Y_MINIMAP + sizeY + offsetY,
             START_X_MINIMAP + offsetX, START_X_MINIMAP + sizeX + offsetX);
-        clippingPlane.setOverlayColor(Color(0, 255, 0));
         
+
+        clippingPlane.setOverlayColor(Color(0, 255, 0));
+
         int dx, dy;
         dx = MINIMAP_X_SIZE / 2 - offsetX - sizeX / 2;
         dy = MINIMAP_Y_SIZE / 2 - offsetY - sizeY / 2;

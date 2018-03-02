@@ -27,7 +27,7 @@ class Reader {
 
             if (fileOpen.is_open()) {
                 string line;
-                short minX = 9999, maxX = 0, minY = 9999, maxY = 0;
+                // short minX = 9999, maxX = 0, minY = 9999, maxY = 0;
                 while (getline(fileOpen, line)) {
                     Component component;
                     Plane plane;
@@ -47,11 +47,12 @@ class Reader {
                     bool negative;
                     int type = 0;
                     while (line[index] != 'z') {
-                        int dx = 0, dy = 0;
+                        long long dx = 0, dy = 0;
                         if (line[index] == 'm' || line[index] == 'l' || line[index] == 'M' || line[index] == 'L') type = 0;
                         else if (line[index] == 'h' || line[index] == 'H') type = 1;
                         else if (line[index] == 'v' || line[index] == 'V') type = 2;
                         else if (line[index] == 'z' || line[index] == 'Z') break;
+                        long long divisor = 1;
                         if (type == 0 || type == 1) {
                             index += 2;
                             negative = false;
@@ -65,11 +66,17 @@ class Reader {
                             }
                             if (line[index] == '.') {
                                 while (line[index] != ',' && line[index] != ' ') {
+                                    dx = 10 * dx + line[index] - '0';
+                                    //divisor *= 10;
                                     index++;
                                 }
                             }
                             if (negative) dx *= -1;
+                            cout << "before" << dx << " divisor " << divisor << endl;
+                            //dx = (long long)((float)dx * 2.7) / divisor;
+                            cout << " after " << dx << endl;
                         }
+                        divisor = 1;
                         if (type == 0 || type == 2) {
                             if (line[index] == ',') index++;
                             else index += 2;
@@ -84,10 +91,13 @@ class Reader {
                             }
                             if (line[index] == '.') {
                                 while (line[index] != 'l' && line[index] != ' ') {
+                                    dy = 10 * dy + line[index] - '0';
+                                    //divisor *= 10;
                                     index++;
                                 }
                             }
                             if (negative) dy *= -1;
+                            //dy = (long long)((float)dy * 2.7) / divisor;
                         }
                         index++;
                         // cout << "AFTER DY: " << line[index] << endl;
@@ -97,13 +107,15 @@ class Reader {
                         cout << line << endl;
                         // cout << dx << " - " << dy << endl;
                         // if (secondPoint.getX() == -32676) float aa = 1 / 0;
-                        if (secondPoint.getX() > maxX) maxX = secondPoint.getX();
-                        if (secondPoint.getX() < minX) minX = secondPoint.getX();
-                        if (secondPoint.getY() > maxY) maxY = secondPoint.getY();
-                        if (secondPoint.getY() < minY) minY = secondPoint.getY();
+                        // if (secondPoint.getX() > maxX) maxX = secondPoint.getX();
+                        // if (secondPoint.getX() < minX) minX = secondPoint.getX();
+                        // if (secondPoint.getY() > maxY) maxY = secondPoint.getY();
+                        // if (secondPoint.getY() < minY) minY = secondPoint.getY();
                         if (!first) {
+                            cout << firstPoint.getX() << "," << firstPoint.getY() << " & " << secondPoint.getX() << "," << secondPoint.getY() << endl;
                             plane.addLine(Line(firstPoint, secondPoint));
                             if (line[index] == 'z') {
+                                cout << secondPoint.getX() << "," << secondPoint.getY() << " & " << veryFirstPoint.getX() << "," << veryFirstPoint.getY() << endl;
                                 plane.addLine(Line(secondPoint, veryFirstPoint));
                             }
                         } else {
@@ -112,8 +124,8 @@ class Reader {
                         }
                     }
                     component.setPlane(plane);
-                    (*layer).setEnvelope(minY, maxY, minX, maxX);
-                    cout << minY << " - " << maxY << " - " << minX << " - " << maxX << endl;
+                    // (*layer).setEnvelope(minY, maxY, minX, maxX);
+                    // cout << minY << " - " << maxY << " - " << minX << " - " << maxX << endl;
                     (*layer).addComponent(component);
                     // break;
                 }

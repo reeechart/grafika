@@ -64,9 +64,11 @@ class Color {
 		}
 
 		void setColor(string colorCode) {
+			cout << "color: " << colorCode << endl;
 			setRedValue((short) stoi(colorCode.substr(1, 2), NULL, 16));
 			setGreenValue((short) stoi(colorCode.substr(3, 2), NULL, 16));
 			setBlueValue((short) stoi(colorCode.substr(5, 2), NULL, 16));
+			cout << "end color: " << colorCode << endl;
 		}
 
 		void overlay(Color color) {
