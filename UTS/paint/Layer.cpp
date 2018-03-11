@@ -35,10 +35,6 @@ class Layer {
             this->right = layer.right;
         }
 
-        void reset() {
-            components.clear();
-        }
-
         Layer& operator=(const Layer& layer) {
             this->components = layer.components;
             this->visibility = layer.visibility;
@@ -60,6 +56,7 @@ class Layer {
             for (auto& component : components) {
                 component = component.clip(clippingPlane);
             }
+            cout << top << "-" << left << "-" << bottom << "-" << right << endl;
         }
 
         vector<Component> getComponents() {

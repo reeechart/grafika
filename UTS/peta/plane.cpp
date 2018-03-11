@@ -29,6 +29,10 @@ class Tugas5 {
         }
 
     public:
+        Tugas5& operator=(const Tugas5& tugas5) {
+            
+        }
+
         void zoomX(float x) {
             zoom += x;
             if (zoom = 0) zoom = 0.1;

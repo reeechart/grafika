@@ -7,26 +7,40 @@
 #include <fcntl.h>
 #include <linux/input.h>
 
-#define START_X_MINIMAP 100
-#define START_Y_MINIMAP 50
-#define MINIMAP_X_SIZE 450
-#define MINIMAP_Y_SIZE 450
-#define START_X_MAP 600
-#define START_Y_MAP 50
-#define MAP_X_SIZE 450
-#define MAP_Y_SIZE 450
-#define SCREEN_X_SIZE 1360
-#define SCREEN_Y_SIZE 760
-#define CURSOR_SPEED_ADJUSTMENT 0.5
-#define START_Y_LAYER_BOXES 600
-#define START_X_LAYER_BOXES 10
-#define SIZE_Y_LAYER_BOXES 50
-#define SIZE_X_LAYER_BOXES 180
+// #define START_X_MINIMAP 100
+// #define START_Y_MINIMAP 50
+// #define MINIMAP_X_SIZE 450
+// #define MINIMAP_Y_SIZE 450
+// #define START_X_MAP 600
+// #define START_Y_MAP 50
+// #define MAP_X_SIZE 450
+// #define MAP_Y_SIZE 450
+// #define SCREEN_X_SIZE 1360
+// #define SCREEN_Y_SIZE 760
+// #define CURSOR_SPEED_ADJUSTMENT 0.5
+// #define START_Y_LAYER_BOXES 600
+// #define START_X_LAYER_BOXES 10
+// #define SIZE_Y_LAYER_BOXES 50
+// #define SIZE_X_LAYER_BOXES 180
 
 class Tugas6 {
     private:
+        const int START_X_MINIMAP = 100;
+        const int START_Y_MINIMAP = 50;
+        const int MINIMAP_X_SIZE = 450;
+        const int MINIMAP_Y_SIZE = 450;
+        const int START_X_MAP = 600;
+        const int START_Y_MAP = 50;
+        const int MAP_X_SIZE = 450;
+        const int MAP_Y_SIZE = 450;
+        const int SCREEN_X_SIZE = 1360;
+        const int SCREEN_Y_SIZE = 760;
+        const float CURSOR_SPEED_ADJUSTMENT = 0.5;
+        const int START_Y_LAYER_BOXES = 600;
+        const int START_X_LAYER_BOXES = 10;
+        const int SIZE_Y_LAYER_BOXES = 50;
+        const int SIZE_X_LAYER_BOXES = 180;
         const int MY_SCENE_NUMBER = 6;
-        pthread_t tid[3];
         int offsetX = 0;
         int offsetY = 0;
         int sizeX = 50;
@@ -189,6 +203,11 @@ class Tugas6 {
         }
 
     public:
+        void reset() {
+            for (int i = 0; i < 7; i++) {
+                layers[i].reset();
+            }
+        }
         void zoomAndLayer(char x) {
             if (x == 'z') {
                 ++sizeX;
@@ -258,6 +277,10 @@ class Tugas6 {
             mouseY = y;
         }
 
+        Tugas6& operator=(const Tugas6& tugas6) {
+
+        }
+
         void execute(int* current_scene) {
             Reader reader;
             Renderer renderer;
@@ -298,8 +321,6 @@ class Tugas6 {
             // pthread_create(&(tid[1]), NULL, &readMouse, NULL);
 
             while (1) {
-                if (*current_scene != MY_SCENE_NUMBER)
-                    break;
                 Canvas window(Point(0, 0), Point(SCREEN_X_SIZE, SCREEN_Y_SIZE));
                 Component mouseCursorClone = mouseCursor;
                 mouseCursorClone.translate(mouseX, mouseY);
@@ -352,6 +373,8 @@ class Tugas6 {
                 renderer.copyToFrameBuffer(window);
 
                 window.clear();
+                if (*current_scene != MY_SCENE_NUMBER)
+                    break;
             }
 
             while(1);

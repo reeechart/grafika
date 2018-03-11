@@ -15,18 +15,6 @@ class Canvas {
 
 	public:
 		// ctor
-		Canvas() {
-			this->topLeftPosition = Point(0, 0);
-			this->bottomRightPosition = Point(1360, 760);
-			colorMap = new Color*[getHeight()];
-			for (int i = 0; i < getHeight(); ++i) {
-				colorMap[i] = new Color[getWidth()];
-				for (int j = 0; j < getWidth(); ++j) {
-					colorMap[i][j] = Color();
-				}
-			}
-		}
-
 		Canvas(Point topLeftPosition, Point bottomRightPosition, Color color = Color()) {
 			this->topLeftPosition = topLeftPosition;
 			this->bottomRightPosition = bottomRightPosition;
@@ -63,7 +51,7 @@ class Canvas {
 				}
 			}
 		}
-		
+
 		// dtor
 		~Canvas() {
 			for (int i = 0; i < getHeight(); ++i) {
