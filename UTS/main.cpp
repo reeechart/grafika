@@ -21,6 +21,7 @@ Tugas3 tugas3;
 Tugas5 tugas5;
 Tugas6 tugas6;
 Tugas7 tugas7;
+bool sceneChanged = false;
 
 #define MOUSEFILE "/dev/input/mice"
 void* readMouse(void *arg) {
@@ -118,34 +119,34 @@ void* readMouse(void *arg) {
     }
 }
 
-void* startScene(void* arg) {
-    pthread_cancel(tid_master[2]);
-    switch (current_scene) {
-        case 1:
-            tugas1.execute(&current_scene);
-            break;
-        case 2:
-            tugas2.execute(&current_scene, &keyboard_character);
-            break;
-        case 3:
-            tugas3.execute(&current_scene);
-            break;
-        case 5:
-            tugas5 = Tugas5();
-            tugas5.execute(&current_scene);
-        case 6:
-            tugas6.reset();
-            pthread_create(&(tid_master[2]), NULL, &readMouse, NULL);
-            tugas6.execute(&current_scene);
-            break;
-        case 7:
-            pthread_create(&(tid_master[2]), NULL, &readMouse, NULL);
-            tugas7.execute(&current_scene);
-            break;
-        default:
-            break;
-    }
-}
+// void* startScene(void* arg) {
+//     pthread_cancel(tid_master[2]);
+//     // switch (current_scene) {
+//     //     case 1:
+//     //         tugas1.execute(&current_scene);
+//     //         break;
+//     //     case 2:
+//     //         tugas2.execute(&current_scene, &keyboard_character);
+//     //         break;
+//     //     case 3:
+//     //         tugas3.execute(&current_scene);
+//     //         break;
+//     //     case 5:
+//     //         tugas5 = Tugas5();
+//     //         tugas5.execute(&current_scene);
+//     //     case 6:
+//     //         tugas6.reset();
+//     //         pthread_create(&(tid_master[2]), NULL, &readMouse, NULL);
+//     //         tugas6.execute(&current_scene);
+//     //         break;
+//     //     case 7:
+//     //         pthread_create(&(tid_master[2]), NULL, &readMouse, NULL);
+//     //         tugas7.execute(&current_scene);
+//     //         break;
+//     //     default:
+//     //         break;
+//     // }
+// }
 
 int kbhit(void)
 {
@@ -173,7 +174,8 @@ void* readInputMaster(void *arg) {
                 char ch = getch();
                 if (ch == 'q' || ch == 'Q') {
                     current_scene = 7;
-                    pthread_create(&(tid_master[1]), NULL, &startScene, NULL);
+                    sceneChanged = true;
+                    //pthread_create(&(tid_master[1]), NULL, &startScene, NULL);
                 }
                 if (ch == '#' && current_scene == 7) {
                     string line;
@@ -195,19 +197,24 @@ void* readInputMaster(void *arg) {
                         pthread_cancel(tid_master[1]);
                         if (ch == 'A') {
                             current_scene = 1;
-                            pthread_create(&(tid_master[1]), NULL, &startScene, NULL);
+                            sceneChanged = true;
+                            // pthread_create(&(tid_master[1]), NULL, &startScene, NULL);
                         } else if (ch == 'B') {
                             current_scene = 2;
-                            pthread_create(&(tid_master[1]), NULL, &startScene, NULL);
+                            sceneChanged = true;
+                            // pthread_create(&(tid_master[1]), NULL, &startScene, NULL);
                         } else if (ch == 'C') {
                             current_scene = 3;
-                            pthread_create(&(tid_master[1]), NULL, &startScene, NULL);
+                            sceneChanged = true;
+                            // pthread_create(&(tid_master[1]), NULL, &startScene, NULL);
                         } else if (ch == 'D') {
                             current_scene = 6;
-                            pthread_create(&(tid_master[1]), NULL, &startScene, NULL);
+                            sceneChanged = true;
+                            // pthread_create(&(tid_master[1]), NULL, &startScene, NULL);
                         } else if (ch == 'E') {
                             current_scene = 5;
-                            pthread_create(&(tid_master[1]), NULL, &startScene, NULL);
+                            sceneChanged = true;
+                            // pthread_create(&(tid_master[1]), NULL, &startScene, NULL);
                         }
                     } else {
                         tugas6.moveClippingPlane(ch);
@@ -247,7 +254,36 @@ int main() {
     pthread_create(&(tid_master[0]), NULL, &readInputMaster, NULL);
     pthread_create(&(tid_master[2]), NULL, &readMouse, NULL);
 
-    while (1);
+    while (1) {
+    	if (sceneChanged) {
+		    sceneChanged = false;
+    		switch (current_scene) {
+		        case 1:
+		            tugas1.execute(&current_scene);
+		            break;
+		        case 2:
+		            tugas2.execute(&current_scene, &keyboard_character);
+		            break;
+		        case 3:
+		            tugas3.execute(&current_scene);
+		            break;
+		        case 5:
+		            tugas5 = Tugas5();
+		            tugas5.execute(&current_scene);
+		        case 6:
+		            tugas6.reset();
+		            pthread_create(&(tid_master[2]), NULL, &readMouse, NULL);
+		            tugas6.execute(&current_scene);
+		            break;
+		        case 7:
+		            pthread_create(&(tid_master[2]), NULL, &readMouse, NULL);
+		            tugas7.execute(&current_scene);
+		            break;
+		        default:
+		            break;
+		    }
+    	}
+    }
 
     return 0;
 }

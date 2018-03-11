@@ -236,7 +236,7 @@ class Tugas3 {
 
             while (1) {
                 if (*current_scene != MY_CURRENT_SCENE) {
-                    break;
+                    return;
                 }
                 for (int i = 0; i < 760; ++i) {
                     for (int j = 0; j < 1360; ++j) {

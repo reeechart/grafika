@@ -388,7 +388,7 @@ class Tugas2 {
                     *keyboard_character = '0';
                 }
                 if (*current_scene != MY_SCENE_NUMBER) {
-                    break;
+                    return;
                 }
                 for (y = 0; y < 760; y++) {
                     for (x = 0; x < 1366; x++) {

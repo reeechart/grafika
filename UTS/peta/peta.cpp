@@ -374,9 +374,9 @@ class Tugas6 {
 
                 window.clear();
                 if (*current_scene != MY_SCENE_NUMBER)
-                    break;
+                    return;
             }
 
-            while(1);
+            // while(1);
         }
 };

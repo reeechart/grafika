@@ -216,9 +216,6 @@ class Tugas7 {
             // pthread_create(&(tid[1]), NULL, &readMouse, NULL);
 
             while (1) {
-                if (*current_scene != MY_SCENE_NUMBER) {
-                    break;
-                }
                 Canvas window(Point(0, 0), Point(SCREEN_X_SIZE, SCREEN_Y_SIZE));
                 
                 Component mouseCursorClone = mouseCursor;
@@ -230,6 +227,10 @@ class Tugas7 {
                 renderer.copyToFrameBuffer(window);
 
                 // window.clear();
+
+                if (*current_scene != MY_SCENE_NUMBER) {
+                    return;
+                }
             }
 
             while(1);

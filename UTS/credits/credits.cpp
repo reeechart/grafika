@@ -308,7 +308,7 @@ class Tugas1 {
 
             for(long int a = 0 ; a < 999999999; a++ ) {
                 if (*current_scene != MY_SCENE_NUMBER) {
-                    break;
+                    return;
                 }
                 for (y = 0; y < 760; y++) {
                     for (x = 0; x < 1366; x++) {

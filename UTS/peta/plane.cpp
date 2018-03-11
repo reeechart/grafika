@@ -207,11 +207,10 @@ class Tugas5 {
 
                 renderer.copyToFrameBuffer(canvas);
                 if (*current_scene != MY_SCENE_NUMBER) {
-                    break;
+                    return;
                 }
 
-                usleep(10000);
+                // usleep(10000);
             }
-            while(1);
         }
 };
