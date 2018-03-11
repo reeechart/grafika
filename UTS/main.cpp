@@ -175,7 +175,7 @@ void* readInputMaster(void *arg) {
                     current_scene = 7;
                     pthread_create(&(tid_master[1]), NULL, &startScene, NULL);
                 }
-                if (ch == '#') {
+                if (ch == '#' && current_scene == 7) {
                     string line;
                     cin >> line;
                     tugas7.changeColor(line);
@@ -183,9 +183,9 @@ void* readInputMaster(void *arg) {
                 if (ch != '\n') {
                     keyboard_character = ch;
                 }
-                if (ch == 'z')
+                if (ch == 'z' && current_scene == 5)
                     tugas5.zoomX(0.1);
-                else if (ch == 'x')
+                else if (ch == 'x' && current_scene == 5)
                     tugas5.zoomX(-0.1);
                 if (ch == '\033') { // if the first value is esc
                     getch(); // skip the [

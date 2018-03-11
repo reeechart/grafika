@@ -35,7 +35,7 @@ class Tugas5 {
 
         void zoomX(float x) {
             zoom += x;
-            if (zoom = 0) zoom = 0.1;
+            if (zoom <= 0.02) zoom = 0.1;
         }
         void execute(int* current_scene) {
             Component airplane;
