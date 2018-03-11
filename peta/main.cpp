@@ -35,6 +35,7 @@ Color colors[7];
 Layer layers[7];
 
 int mouseX = 0, mouseY = 0;
+Component mouseCursor;
 
 int kbhit(void)
 {
@@ -105,6 +106,7 @@ void* readMouse(void *arg) {
         mouseY = absolute_y / CURSOR_SPEED_ADJUSTMENT;
         bool dragged = false;
         if (bLeft) {
+            mouseCursor.setColor(Color(255, 255, 255));
             if (mouseX > START_X_MINIMAP + sizeX / 2 && mouseX < START_X_MINIMAP + MINIMAP_X_SIZE - sizeX / 2
                     && mouseY > START_Y_MINIMAP + sizeY / 2 && mouseY < START_Y_MINIMAP + MINIMAP_Y_SIZE + sizeY / 2)
                 setOffset(mouseX - START_X_MINIMAP - sizeX / 2, mouseY - START_Y_MINIMAP - sizeY / 2);
@@ -129,6 +131,7 @@ void* readMouse(void *arg) {
                 layers[position].setVisibility(!layers[position].isVisible());
             }
         } else {
+            mouseCursor.setColor(Color(0, 200, 50));
             dragged = false;
         }
     }
@@ -198,7 +201,6 @@ void* readInput(void *arg) {
 int main() {
     Reader reader;
     Renderer renderer;
-    Component mouseCursor;
     mouseCursor.setColor(Color(0, 200, 50));
     mouseCursor.setBorderColor(Color(0, 0, 0));
 
